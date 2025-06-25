@@ -907,16 +907,41 @@
                 color: #ffffff;
             }
             
+            .alert-table {
+                background: #2d2d2d;
+                color: #ffffff;
+            }
+            
             .alert-table th {
-                background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                color: #ffffff !important;
+                border-bottom: 2px solid #4a5568;
             }
             
             .alert-table td {
-                border-bottom-color: #4a5568;
+                background: #2d2d2d !important;
+                color: #e2e8f0 !important;
+                border-bottom: 1px solid #4a5568;
             }
             
             .alert-table tr:hover {
-                background-color: #2d3748;
+                background-color: #374151 !important;
+            }
+            
+            .alert-table tr:hover td {
+                background-color: #374151 !important;
+                color: #ffffff !important;
+            }
+            
+            /* Total row in dark mode */
+            .alert-table tr[style*="background-color: #f8f9fa"] {
+                background-color: #374151 !important;
+            }
+            
+            .alert-table tr[style*="background-color: #f8f9fa"] td {
+                background-color: #374151 !important;
+                color: #ffffff !important;
+                font-weight: bold;
             }
             
             .equipment-item {
@@ -925,7 +950,38 @@
             }
             
             .plant-equipment {
-                background: #2d3748;
+                background: #374151;
+            }
+            
+            /* Filter dropdown in dark mode */
+            .filter-section select {
+                background: #2d2d2d !important;
+                color: #ffffff !important;
+                border-color: #4a5568 !important;
+            }
+            
+            .filter-section select option {
+                background: #2d2d2d !important;
+                color: #ffffff !important;
+            }
+            
+            /* Summary table rows in dark mode */
+            .alert-table tr[style*="background-color: #e8f5ff"] {
+                background-color: #1e3a8a !important;
+            }
+            
+            .alert-table tr[style*="background-color: #e8f5ff"] td {
+                background-color: #1e3a8a !important;
+                color: #ffffff !important;
+            }
+            
+            .alert-table tr[style*="background-color: #f3e8ff"] {
+                background-color: #581c87 !important;
+            }
+            
+            .alert-table tr[style*="background-color: #f3e8ff"] td {
+                background-color: #581c87 !important;
+                color: #ffffff !important;
             }
         }
     </style>
