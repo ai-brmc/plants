@@ -164,6 +164,21 @@
                 updateCharts(filteredData);
                 updateAlertTable(filteredData);
                 updateFilterStats(selectedMonth, filteredData.length);
+                
+                // Smooth scroll to top when filter changes
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                // Add visual feedback for filter change
+                const filterContainer = document.querySelector('.filter-container');
+                filterContainer.style.transform = 'scale(1.05)';
+                filterContainer.style.transition = 'transform 0.2s ease';
+                
+                setTimeout(() => {
+                    filterContainer.style.transform = 'scale(1)';
+                }, 200);
             });
 
             // Alert Severity Pie Chart
@@ -235,6 +250,17 @@
                 }
             });
 
+            // Add smooth scrolling for any top navigation elements
+            document.querySelectorAll('a[href^="#"], button[data-scroll-to-top]').forEach(element => {
+                element.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
             // Initialize table with April 2025 data by default
             filteredData = filterDataByMonth('2025-04');
             updateAlertTable(filteredData);
@@ -252,6 +278,16 @@
                     card.style.transform = 'translateY(0)';
                 }, index * 100);
             });
+            
+            // Add scroll-to-top functionality for equipment cards
+            document.querySelectorAll('.equipment-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            });
         });
     </script>
 </body>
@@ -267,6 +303,10 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
         }
         
         body {
@@ -746,18 +786,159 @@
             z-index: 1;
         }
         
+        @media (max-width: 1200px) {
+            .summary-section {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+        
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .dashboard-container {
+                border-radius: 16px;
+            }
+            
+            .header {
+                padding: 20px 25px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+                margin-bottom: 8px;
+            }
+            
+            .header p {
+                font-size: 1em;
+            }
+            
+            .filter-section {
+                padding: 20px 25px;
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .filter-container {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+                text-align: center;
+            }
+            
+            .filter-label {
+                font-size: 1.2em;
+            }
+            
+            .filter-select {
+                min-width: 100%;
+                padding: 12px 20px;
+                font-size: 1.1em;
+            }
+            
+            .filter-stats {
+                font-size: 1em;
+                padding: 12px 20px;
+                text-align: center;
+            }
+            
             .dashboard-grid {
                 grid-template-columns: 1fr;
-                padding: 15px;
+                padding: 20px;
+                gap: 20px;
             }
             
             .summary-section {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .total-number {
+                font-size: 3.5em;
+                margin: 20px 0 12px 0;
+            }
+            
+            .total-label {
+                font-size: 1.2em;
+            }
+            
+            .card-title {
+                font-size: 1.3em;
+                margin-bottom: 20px;
+            }
+            
+            .equipment-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 12px;
+            }
+            
+            .equipment-card {
+                padding: 15px;
+            }
+            
+            .equipment-number {
+                font-size: 1em;
+            }
+            
+            .equipment-count {
+                font-size: 1.6em;
+            }
+            
+            .equipment-type {
+                font-size: 0.75em;
+            }
+            
+            .alert-table {
+                font-size: 0.8em;
+            }
+            
+            .alert-table th {
+                padding: 12px 8px;
+                font-size: 0.8em;
+            }
+            
+            .alert-table td {
+                padding: 10px 8px;
+                font-size: 0.75em;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
             }
             
             .total-number {
                 font-size: 3em;
+            }
+            
+            .filter-label {
+                font-size: 1em;
+            }
+            
+            .filter-select {
+                font-size: 1em;
+                padding: 10px 15px;
+            }
+            
+            .equipment-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .alert-table th,
+            .alert-table td {
+                padding: 8px 6px;
+                font-size: 0.7em;
             }
         }
     </style>
