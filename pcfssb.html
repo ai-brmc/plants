@@ -1,0 +1,1038 @@
+    <script>
+        // Alert data
+        const alertData = [
+            {plant: "PCFSSB", equipment: "K-31-01", model: "ST PERFORMANCE", description: "TURB EXTRCTN STM PRS Deviation - Absolute", type: "Low Warning", timestamp: "4/1/2025 8:19:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "ST PERFORMANCE", description: "ST THRUST BRG INACT TEMP Deviation - Absolute", type: "Low Warning", timestamp: "4/6/2025 11:59:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 4 ANTISURGE CTRL VLV FEEDBACK Deviation - Absolute", type: "High Alert", timestamp: "4/9/2025 9:29:33 PM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 1 STD VOL FLOW Deviation - Absolute", type: "Low Warning", timestamp: "4/16/2025 1:29:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 3 STD VOL FLOW Deviation - Absolute", type: "Low Warning", timestamp: "4/16/2025 1:29:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 1 SUCTION FLOW Deviation - Absolute", type: "Low Warning", timestamp: "4/16/2025 1:44:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 3 SUCTION FLOW Deviation - Absolute", type: "Low Warning", timestamp: "4/16/2025 1:44:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "ST PERFORMANCE", description: "ST BRG NDE TEMP Deviation - Absolute", type: "Low Warning", timestamp: "4/16/2025 1:54:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 2 DISCH PRESS Deviation - Absolute", type: "Low Warning", timestamp: "4/16/2025 2:09:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 3 DISCH PRESS Deviation - Absolute", type: "Low Warning", timestamp: "4/16/2025 2:09:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "ST PERFORMANCE", description: "LUBE OIL SUPPLY TEMP Deviation - Absolute", type: "High Warning", timestamp: "4/16/2025 3:04:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "ST PERFORMANCE", description: "SURFACE CONDENSER LEVEL 2 Deviation - Absolute", type: "High Warning", timestamp: "4/16/2025 3:04:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "ST PERFORMANCE", description: "ST BRG DE TEMP Deviation - Absolute", type: "High Warning", timestamp: "4/16/2025 3:04:33 AM"},
+            {plant: "PCFSSB", equipment: "K-19-01", model: "NH3 REFRIG COMP LP PERFORMANCE", description: "LP COMP LEAKOFF L PRS DE Deviation - Absolute", type: "High Warning", timestamp: "4/16/2025 8:24:33 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "ST PERFORMANCE", description: "ST EXTRACTION STEAM TEMP Deviation - Absolute", type: "High Warning", timestamp: "4/18/2025 4:29:33 AM"},
+            {plant: "PCFSSB", equipment: "K-31-01", model: "GB MECHANICAL", description: "GR Accelerometer (HSS) Actual Value", type: "High Warning", timestamp: "4/21/2025 9:09:37 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 4 SUCTION FLOW Deviation - Absolute", type: "High Warning", timestamp: "4/26/2025 7:14:25 PM"},
+            {plant: "PCFSSB", equipment: "K-12-01", model: "PROCESS AIR COMP PERFORMANCE", description: "PROCESS AIR COMP BHR NDE TEMP Deviation - Absolute", type: "Low Warning", timestamp: "4/27/2025 2:14:25 AM"},
+            {plant: "PCFSSB", equipment: "K-12-01", model: "ST PERFORMANCE", description: "ST INLET STEAM TEMP Deviation - Absolute", type: "Low Warning", timestamp: "4/27/2025 8:44:25 AM"},
+            {plant: "PCFSSB", equipment: "K-12-01", model: "ST PERFORMANCE", description: "ST EXTRACTION PRESSURE Deviation - Absolute", type: "Low Warning", timestamp: "4/28/2025 12:14:25 PM"},
+            {plant: "PCFSSB", equipment: "K-19-01", model: "NH3 REFRIG COMP PERFORMANCE", description: "NH3 COMP SUCTION TEMP Deviation - Absolute", type: "Low Warning", timestamp: "4/28/2025 6:29:25 PM"},
+            {plant: "PCFSSB", equipment: "K-19-01", model: "NH3 REFRIG COMP PERFORMANCE", description: "NH3 COMP DISCH PRESSURE Deviation - Absolute", type: "Low Warning", timestamp: "4/29/2025 1:44:25 AM"},
+            {plant: "PCFSSB", equipment: "K-12-01", model: "PROCESS AIR COMP PERFORMANCE", description: "PROCESS AIR COMP SUCTION PRESSURE Deviation - Absolute", type: "Low Warning", timestamp: "4/29/2025 4:59:25 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 3 SUCTION TEMP Deviation - Absolute", type: "Low Warning", timestamp: "4/29/2025 11:14:25 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 2 DISCH TEMP Deviation - Absolute", type: "Low Warning", timestamp: "4/29/2025 3:29:25 PM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 4 ANTISURGE VLV POSITION Deviation - Absolute", type: "Low Warning", timestamp: "4/30/2025 7:44:25 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 1 SUCTION PRESSURE Deviation - Absolute", type: "Low Warning", timestamp: "4/30/2025 1:59:25 PM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 2 SUCTION TEMP Deviation - Absolute", type: "Low Warning", timestamp: "4/30/2025 6:14:25 PM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 5 DISCH TEMP Deviation - Absolute", type: "Low Warning", timestamp: "4/30/2025 10:29:25 PM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 1 ANTISURGE VLV FEEDBACK Deviation - Absolute", type: "Low Warning", timestamp: "5/1/2025 2:44:25 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 3 ANTISURGE VLV POSITION Deviation - Absolute", type: "Low Warning", timestamp: "5/1/2025 6:59:25 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 4 DISCH PRESSURE Deviation - Absolute", type: "Low Warning", timestamp: "5/1/2025 11:14:25 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 2 SUCTION PRESSURE Deviation - Absolute", type: "Low Warning", timestamp: "5/1/2025 3:29:25 PM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 3 DISCH TEMP Deviation - Absolute", type: "Low Warning", timestamp: "5/1/2025 7:44:25 PM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 4 DISCH PRESSURE Deviation - Absolute", type: "Low Warning", timestamp: "5/1/2025 11:59:25 PM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 2 ANTISURGE VLV FEEDBACK Deviation - Absolute", type: "Low Warning", timestamp: "5/2/2025 4:14:25 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 1 DISCH TEMP Deviation - Absolute", type: "Low Warning", timestamp: "5/2/2025 8:29:25 AM"},
+            {plant: "PCFSSB", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 3 ANTISURGE VLV POSITION Deviation - Absolute", type: "Low Warning", timestamp: "5/2/2025 12:44:25 PM"}
+        ];
+
+        let alertSeverityChart;
+        let equipmentChart;
+        let filteredData = alertData;
+
+        function getMonthFromTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            return `${year}-${month}`;
+        }
+
+        function filterDataByMonth(selectedMonth) {
+            if (selectedMonth === 'all') {
+                return alertData;
+            }
+            return alertData.filter(alert => getMonthFromTimestamp(alert.timestamp) === selectedMonth);
+        }
+
+        function updateSeverityCounts(data) {
+            const highAlert = data.filter(alert => alert.type === 'High Alert').length;
+            const highWarning = data.filter(alert => alert.type === 'High Warning').length;
+            const lowWarning = data.filter(alert => alert.type === 'Low Warning').length;
+            const total = data.length;
+
+            document.getElementById('totalAlertsCount').textContent = total;
+            document.getElementById('highAlertCount').textContent = `High Alert: ${highAlert}`;
+            document.getElementById('highWarningCount').textContent = `High Warning: ${highWarning}`;
+            document.getElementById('lowWarningCount').textContent = `Low Warning: ${lowWarning}`;
+
+            return { highAlert, highWarning, lowWarning, total };
+        }
+
+        function updateEquipmentCounts(data) {
+            const equipmentCounts = {};
+            data.forEach(alert => {
+                const key = `${alert.equipment}-${alert.model.split(' ')[0]}`;
+                equipmentCounts[key] = (equipmentCounts[key] || 0) + 1;
+            });
+
+            return equipmentCounts;
+        }
+
+        function updateAlertTable(data) {
+            const tbody = document.getElementById('alertTableBody');
+            tbody.innerHTML = '';
+
+            data.forEach(alert => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${alert.plant}</td>
+                    <td>${alert.equipment}</td>
+                    <td>${alert.model}</td>
+                    <td>${alert.description}</td>
+                    <td>${alert.type}</td>
+                    <td>${alert.timestamp}</td>
+                `;
+            });
+
+            // Add total row
+            const totalRow = tbody.insertRow();
+            totalRow.style.backgroundColor = '#f8f9fa';
+            totalRow.style.fontWeight = 'bold';
+            totalRow.innerHTML = `
+                <td colspan="5">Total Alerts</td>
+                <td>${data.length}</td>
+            `;
+        }
+
+        function updateFilterStats(selectedMonth, total) {
+            const filterStats = document.getElementById('filterStats');
+            if (selectedMonth === 'all') {
+                filterStats.textContent = `📈 Showing all ${total} alerts`;
+            } else {
+                const monthNames = {
+                    '2025-04': 'April 2025',
+                    '2025-05': 'May 2025',
+                    '2025-06': 'June 2025',
+                    '2025-07': 'July 2025',
+                    '2025-08': 'August 2025',
+                    '2025-09': 'September 2025',
+                    '2025-10': 'October 2025',
+                    '2025-11': 'November 2025',
+                    '2025-12': 'December 2025'
+                };
+                filterStats.textContent = `📈 Showing ${total} alerts for ${monthNames[selectedMonth]}`;
+            }
+        }
+
+        function updateCharts(data) {
+            const severityCounts = updateSeverityCounts(data);
+            
+            // Update severity chart
+            alertSeverityChart.data.datasets[0].data = [
+                severityCounts.highAlert,
+                severityCounts.highWarning,
+                severityCounts.lowWarning
+            ];
+            alertSeverityChart.data.labels = [
+                `High Alert (${severityCounts.highAlert})`,
+                `High Warning (${severityCounts.highWarning})`,
+                `Low Warning (${severityCounts.lowWarning})`
+            ];
+            alertSeverityChart.update();
+
+            // Update equipment chart
+            const equipmentCounts = updateEquipmentCounts(data);
+            const equipmentLabels = Object.keys(equipmentCounts);
+            const equipmentValues = Object.values(equipmentCounts);
+            
+            equipmentChart.data.labels = equipmentLabels.slice(0, 6); // Show top 6
+            equipmentChart.data.datasets[0].data = equipmentValues.slice(0, 6);
+            equipmentChart.update();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize month filter
+            const monthFilter = document.getElementById('monthFilter');
+            monthFilter.addEventListener('change', function() {
+                const selectedMonth = this.value;
+                filteredData = filterDataByMonth(selectedMonth);
+                updateCharts(filteredData);
+                updateAlertTable(filteredData);
+                updateFilterStats(selectedMonth, filteredData.length);
+            });
+
+            // Alert Severity Pie Chart
+            const alertSeverityCtx = document.getElementById('alertSeverityChart').getContext('2d');
+            alertSeverityChart = new Chart(alertSeverityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High Alert (1)', 'High Warning (7)', 'Low Warning (21)'],
+                    datasets: [{
+                        data: [1, 7, 21],
+                        backgroundColor: ['#74b9ff', '#00b894', '#fdcb6e'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Equipment Chart
+            const equipmentCtx = document.getElementById('equipmentChart').getContext('2d');
+            equipmentChart = new Chart(equipmentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['K-16-01 LP', 'K-16-01 HP', 'K-16-01 ST', 'K-12-01', 'K-19-01', 'K-31-01'],
+                    datasets: [{
+                        label: 'Alert Count',
+                        data: [15, 12, 8, 4, 4, 2],
+                        backgroundColor: ['#00b894', '#00b894', '#00b894', '#fdcb6e', '#fdcb6e', '#fdcb6e'],
+                        borderColor: '#2c3e50',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 16,
+                            grid: {
+                                color: '#ecf0f1'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize table with April 2025 data by default
+            filteredData = filterDataByMonth('2025-04');
+            updateAlertTable(filteredData);
+            updateFilterStats('2025-04', filteredData.length);
+            updateCharts(filteredData);
+
+            // Add animation to cards on load
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PETRONAS PCFSSB Machine Monitoring Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 32px 64px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.2);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+            background-size: 200% 200%;
+            animation: headerGradient 10s ease infinite;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="70" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes headerGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, -10px) rotate(90deg); }
+            50% { transform: translate(-5px, -20px) rotate(180deg); }
+            75% { transform: translate(-15px, -5px) rotate(270deg); }
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: -0.5px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+            font-weight: 400;
+        }
+        
+        .filter-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+            backdrop-filter: blur(10px);
+            padding: 25px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.9) 0%, rgba(42, 82, 152, 0.9) 100%);
+            padding: 20px 30px;
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+        }
+        
+        .filter-label {
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.4em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .filter-select {
+            padding: 15px 25px;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            color: #2c3e50;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            min-width: 220px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.9);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .filter-select option {
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 10px;
+            background: #ffffff;
+        }
+        
+        .filter-select:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.9);
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            border-color: #667eea;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.3), 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            border-color: #667eea;
+        }
+        
+        .filter-stats {
+            color: #ffffff;
+            font-size: 1.2em;
+            font-weight: 700;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.8) 0%, rgba(102, 126, 234, 0.8) 100%);
+            padding: 15px 25px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        
+        .summary-section {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 2fr 2fr;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.4);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { background-position: -200% 0; }
+            50% { background-position: 200% 0; }
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.4);
+        }
+        
+        .total-alerts {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+            background-size: 300% 300%;
+            animation: gradientShift 8s ease infinite;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .total-alerts::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .total-number {
+            font-size: 4.5em;
+            font-weight: 800;
+            margin: 25px 0 15px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(45deg, #ffffff, #f8f9fa, #ffffff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 4s ease-in-out infinite;
+        }
+        
+        @keyframes textShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .total-label {
+            font-size: 1.4em;
+            font-weight: 600;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .card-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, #3498db, #667eea) padding-box, 
+                       linear-gradient(90deg, #3498db, #667eea) border-box;
+            border-image: linear-gradient(90deg, #3498db, #667eea) 1;
+            padding-bottom: 12px;
+            position: relative;
+        }
+        
+        .card-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.6s ease;
+        }
+        
+        .card:hover .card-title::after {
+            width: 100%;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 15px;
+        }
+        
+        .alert-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+        
+        .alert-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 12px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .alert-table th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        }
+        
+        .alert-table th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+        
+        .alert-table th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+        
+        .alert-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 0.85em;
+            vertical-align: top;
+            transition: all 0.3s ease;
+        }
+        
+        .alert-table tr:hover {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            transform: scale(1.002);
+        }
+        
+        .alert-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .equipment-card {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .equipment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            transition: all 0.4s ease;
+        }
+        
+        .equipment-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .equipment-card:hover::before {
+            background: linear-gradient(45deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+        }
+        
+        .severity-legend {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+        
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .high-alert { background-color: #74b9ff; }
+        .high-warning { background-color: #00b894; }
+        .low-warning { background-color: #fdcb6e; }
+        .low-alert { background-color: #95a5a6; }
+        
+        .equipment-section {
+            grid-column: 1 / -1;
+        }
+        
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .equipment-card {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .equipment-card.high-alert {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
+        
+        .equipment-card.high-warning {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+        }
+        
+        .equipment-card.low-warning {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+        }
+        
+        .equipment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+        }
+        
+        .equipment-number {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .equipment-count {
+            font-size: 1.8em;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .equipment-type {
+            font-size: 0.8em;
+            opacity: 0.9;
+            margin-top: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            
+            .summary-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .total-number {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>PETRONAS PCFSSB Machine Monitoring & Predictive Diagnostic</h1>
+            <p>Real Time Alert Management Dashboard - PCFSSB Plant Operations</p>
+        </div>
+        
+        <div class="filter-section">
+            <div class="filter-container">
+                <span class="filter-label">📊 FILTER BY MONTH</span>
+                <select class="filter-select" id="monthFilter">
+                    <option value="all">🗓️ All Months</option>
+                    <option value="2025-04" selected>📅 April 2025</option>
+                    <option value="2025-05">📅 May 2025</option>
+                    <option value="2025-06">📅 June 2025</option>
+                    <option value="2025-07">📅 July 2025</option>
+                    <option value="2025-08">📅 August 2025</option>
+                    <option value="2025-09">📅 September 2025</option>
+                    <option value="2025-10">📅 October 2025</option>
+                    <option value="2025-11">📅 November 2025</option>
+                    <option value="2025-12">📅 December 2025</option>
+                </select>
+            </div>
+            <div class="filter-stats" id="filterStats">
+                📈 Showing 29 alerts for April 2025
+            </div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="summary-section">
+                <div class="card total-alerts">
+                    <div class="total-number" id="totalAlertsCount">29</div>
+                    <div class="total-label">Total Alerts</div>
+                    <div class="severity-legend" style="justify-content: center; margin-top: 20px;">
+                        <div class="legend-item">
+                            <div class="legend-dot high-alert"></div>
+                            <span id="highAlertCount">High Alert: 1</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot high-warning"></div>
+                            <span id="highWarningCount">High Warning: 7</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot low-warning"></div>
+                            <span id="lowWarningCount">Low Warning: 21</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Alert Severity Distribution</div>
+                    <div class="chart-container">
+                        <canvas id="alertSeverityChart"></canvas>
+                    </div>
+                    <div class="severity-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot high-alert"></div>
+                            <span>High Alert</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot high-warning"></div>
+                            <span>High Warning</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot low-warning"></div>
+                            <span>Low Warning</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Equipment Alert Summary</div>
+                    <div class="chart-container">
+                        <canvas id="equipmentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="equipment-section">
+                <div class="card">
+                    <div class="card-title">K-16-01 Syngas Compressor</div>
+                    <div class="equipment-grid">
+                        <div class="equipment-card high-warning">
+                            <div class="equipment-number">K-16-01 HP</div>
+                            <div class="equipment-count">12</div>
+                            <div class="equipment-type">SYNGAS COMP HP</div>
+                        </div>
+                        <div class="equipment-card high-warning">
+                            <div class="equipment-number">K-16-01 LP</div>
+                            <div class="equipment-count">15</div>
+                            <div class="equipment-type">SYNGAS COMP LP</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-title" style="margin-top: 30px;">Steam Turbine Performance</div>
+                    <div class="equipment-grid">
+                        <div class="equipment-card high-warning">
+                            <div class="equipment-number">K-16-01</div>
+                            <div class="equipment-count">8</div>
+                            <div class="equipment-type">ST PERFORMANCE</div>
+                        </div>
+                        <div class="equipment-card low-warning">
+                            <div class="equipment-number">K-12-01</div>
+                            <div class="equipment-count">2</div>
+                            <div class="equipment-type">ST PERFORMANCE</div>
+                        </div>
+                        <div class="equipment-card low-warning">
+                            <div class="equipment-number">K-19-01</div>
+                            <div class="equipment-count">1</div>
+                            <div class="equipment-type">ST PERFORMANCE</div>
+                        </div>
+                        <div class="equipment-card low-warning">
+                            <div class="equipment-number">K-31-01</div>
+                            <div class="equipment-count">1</div>
+                            <div class="equipment-type">ST PERFORMANCE</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-title" style="margin-top: 30px;">Other Equipment</div>
+                    <div class="equipment-grid">
+                        <div class="equipment-card low-warning">
+                            <div class="equipment-number">K-12-01</div>
+                            <div class="equipment-count">2</div>
+                            <div class="equipment-type">PROCESS AIR COMP</div>
+                        </div>
+                        <div class="equipment-card high-warning">
+                            <div class="equipment-number">K-31-01</div>
+                            <div class="equipment-count">1</div>
+                            <div class="equipment-type">GB MECHANICAL</div>
+                        </div>
+                        <div class="equipment-card low-warning">
+                            <div class="equipment-number">K-19-01</div>
+                            <div class="equipment-count">2</div>
+                            <div class="equipment-type">NH3 REFRIG COMP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="grid-column: 1 / -1;">
+                <div class="card-title">Detailed Alert Information</div>
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Plant</th>
+                            <th>Equipment</th>
+                            <th>Model</th>
+                            <th>Extended Description</th>
+                            <th>Alert Type</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alertTableBody"></tbody>
+                </table>
+            </div>
+            
+            <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+                <div class="card-title">Summary by Equipment & Model</div>
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Equipment</th>
+                            <th>Model</th>
+                            <th>Count</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background-color: #e8f5ff;"><td colspan="4"><strong>Syngas Compressor Equipment</strong></td></tr>
+                        <tr><td>K-16-01</td><td>SYNGAS COMP LP PERFORMANCE</td><td>15</td><td>40.5%</td></tr>
+                        <tr><td>K-16-01</td><td>SYNGAS COMP HP PERFORMANCE</td><td>12</td><td>32.4%</td></tr>
+                        <tr style="background-color: #f3e8ff;"><td colspan="4"><strong>Steam Turbine Equipment</strong></td></tr>
+                        <tr><td>K-16-01</td><td>ST PERFORMANCE</td><td>8</td><td>21.6%</td></tr>
+                        <tr><td>K-12-01</td><td>ST PERFORMANCE</td><td>2</td><td>5.4%</td></tr>
+                        <tr><td>K-31-01</td><td>ST PERFORMANCE</td><td>1</td><td>2.7%</td></tr>
+                        <tr><td>K-19-01</td><td>ST PERFORMANCE</td><td>1</td><td>2.7%</td></tr>
+                        <tr style="background-color: #fff2e8;"><td colspan="4"><strong>Other Equipment</strong></td></tr>
+                        <tr><td>K-12-01</td><td>PROCESS AIR COMP PERFORMANCE</td><td>2</td><td>5.4%</td></tr>
+                        <tr><td>K-19-01</td><td>NH3 REFRIG COMP PERFORMANCE</td><td>2</td><td>5.4%</td></tr>
+                        <tr><td>K-31-01</td><td>GB MECHANICAL</td><td>1</td><td>2.7%</td></tr>
+                        <tr><td>K-19-01</td><td>NH3 REFRIG COMP LP PERFORMANCE</td><td>1</td><td>2.7%</td></tr>
+                        <tr style="background-color: #f8f9fa; font-weight: bold;"><td colspan="3">Total</td><td>37 (100%)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Alert Severity Pie Chart
+            const alertSeverityCtx = document.getElementById('alertSeverityChart').getContext('2d');
+            new Chart(alertSeverityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High Alert (1)', 'High Warning (8)', 'Low Warning (28)'],
+                    datasets: [{
+                        data: [1, 8, 28],
+                        backgroundColor: ['#74b9ff', '#00b894', '#fdcb6e'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Equipment Chart
+            const equipmentCtx = document.getElementById('equipmentChart').getContext('2d');
+            new Chart(equipmentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['K-16-01 LP', 'K-16-01 HP', 'K-16-01 ST', 'K-12-01', 'K-19-01', 'K-31-01'],
+                    datasets: [{
+                        label: 'Alert Count',
+                        data: [15, 12, 8, 4, 4, 2],
+                        backgroundColor: ['#00b894', '#00b894', '#00b894', '#fdcb6e', '#fdcb6e', '#fdcb6e'],
+                        borderColor: '#2c3e50',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 16,
+                            grid: {
+                                color: '#ecf0f1'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Add animation to cards on load
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
