@@ -1,0 +1,1233 @@
+    <script>
+        // Store all alert data for filtering
+        const allAlerts = [
+            // April 2025 alerts
+            { plant: "PCMSB", train: "XT-07002", model: "GT COMBUSTION", type: "High Warning", month: "2025-04", timestamp: "4/4/2025 12:49:33 PM", description: "T FUEL GAS Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-1301", model: "ST PERFORMANCE", type: "High Warning", month: "2025-04", timestamp: "4/6/2025 7:49:33 AM", description: "LUBE OIL SUPPLY PRESS Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GT MECH", type: "Low Warning", month: "2025-04", timestamp: "4/14/2025 7:04:33 PM", description: "BEARING TEMP2 TURB. Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-202", model: "SINGLE STG CENT COMP PERFORMANCE", type: "Low Warning", month: "2025-04", timestamp: "4/21/2025 2:59:37 AM", description: "CENT COMP SECONDARY SEAL GAS PRESS Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-202", model: "SINGLE STG CENT COMP PERFORMANCE", type: "Low Warning", month: "2025-04", timestamp: "4/21/2025 7:09:37 AM", description: "CENT COMP NDE PRIMARY SEAL LEAK OFF FLOW Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-202", model: "SINGLE STG CENT COMP PERFORMANCE", type: "High Warning", month: "2025-04", timestamp: "4/21/2025 8:14:37 AM", description: "CENT COMP DE PRIMARY SEAL LEAK OFF FLOW Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-104", model: "ST PERFORMANCE", type: "High Warning", month: "2025-04", timestamp: "4/21/2025 8:29:25 PM", description: "LUBE OIL SUPPLY PRESS Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-104", model: "ST PERFORMANCE", type: "High Warning", month: "2025-04", timestamp: "4/21/2025 8:29:25 PM", description: "LUBE OIL SUPPLY PRESS 2 Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-13001", model: "MULTSTG CENT COMP PERFORMANCE", type: "Low Warning", month: "2025-04", timestamp: "4/21/2025 9:44:25 PM", description: "MAC INTERCOOLER INLET 3 PRESSURE Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-202", model: "SINGLE STG CENT COMP PERFORMANCE", type: "Low Warning", month: "2025-04", timestamp: "4/22/2025 3:19:25 AM", description: "CENT COMP BRG NDE VIB Y Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-104", model: "ST PERFORMANCE", type: "Low Warning", month: "2025-04", timestamp: "4/22/2025 6:34:25 AM", description: "ST BRG NDE TEMP Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-104", model: "SINGLE STG CENT COMP PERFORMANCE", type: "Low Warning", month: "2025-04", timestamp: "4/25/2025 11:14:25 PM", description: "CENT COMP BRG DE VIB Y Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GT MECH", type: "Low Warning", month: "2025-04", timestamp: "4/30/2025 12:59:25 AM", description: "LUBE OIL RETURN TEMP 2 Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GT MECH", type: "Low Warning", month: "2025-04", timestamp: "4/30/2025 1:14:25 AM", description: "GEAR SCAVEN OIL TEMP 1 Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GT MECH", type: "Low Warning", month: "2025-04", timestamp: "4/30/2025 1:14:25 AM", description: "GEAR SCAVEN OIL TEMP 4 Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GT MECH", type: "Low Warning", month: "2025-04", timestamp: "4/30/2025 1:19:25 AM", description: "LUBE OIL SUPPLY TEMP. Deviation - Absolute" },
+            
+            // May 2025 alerts
+            { plant: "PCMSB", train: "XT-07002", model: "GT MECH", type: "Low Warning", month: "2025-05", timestamp: "5/3/2025 3:59:25 PM", description: "ATMOSPHERE HUMIDITY Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GB MECH", type: "High Warning", month: "2025-05", timestamp: "5/4/2025 4:39:25 PM", description: "GEAR SHAFT VIB 4-2 HISPD Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GB MECH", type: "High Warning", month: "2025-05", timestamp: "5/4/2025 6:14:25 PM", description: "GEAR SHAFT VIB 3-2 HISPD Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-1301", model: "MULTSTG CENT COMP PERFORMANCE", type: "High Warning", month: "2025-05", timestamp: "5/6/2025 5:09:25 PM", description: "CENT COMP BRG DE VIB Y Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-13001", model: "MULTSTG CENT COMP PERFORMANCE", type: "Low Warning", month: "2025-05", timestamp: "5/8/2025 12:54:25 AM", description: "MAC INTERCOOLER INLET 4 PRESSURE Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-1301", model: "ST PERFORMANCE", type: "High Warning", month: "2025-05", timestamp: "5/8/2025 10:44:25 AM", description: "ST BRG NDE VIB X Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-13001", model: "MULTSTG CENT COMP PERFORMANCE", type: "Low Warning", month: "2025-05", timestamp: "5/9/2025 5:14:25 AM", description: "MAC INTERCOOLER OUTLET 2 TEMPERATURE Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-13001", model: "MULTSTG CENT COMP PERFORMANCE", type: "High Alert", month: "2025-05", timestamp: "5/9/2025 5:14:25 AM", description: "MAC COMPRESSOR NDE SHAFT JOURNAL BEARING TEMPERATURE Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-13001", model: "MULTSTG CENT COMP PERFORMANCE", type: "Low Warning", month: "2025-05", timestamp: "5/9/2025 5:14:25 AM", description: "MAC COMPRESSOR ACTIVE THRUST BEARING TEMPERATURE Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-1301", model: "ST PERFORMANCE", type: "Low Warning", month: "2025-05", timestamp: "5/10/2025 6:04:25 AM", description: "ST INLET TEMP Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-13001", model: "ST PERFORMANCE", type: "Low Warning", month: "2025-05", timestamp: "5/11/2025 5:34:25 AM", description: "MAC NDE SHAFT JOURNAL BEARING TEMPERATURE Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-104", model: "SINGLE STG CENT COMP PERFORMANCE", type: "High Warning", month: "2025-05", timestamp: "5/18/2025 1:09:25 PM", description: "CENT COMP THRUST BRG INACT TEMP 2 Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-104", model: "SINGLE STG CENT COMP PERFORMANCE", type: "High Warning", month: "2025-05", timestamp: "5/18/2025 1:09:25 PM", description: "CENT COMP THRUST BRG INACT TEMP 2 Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GENERATOR", type: "High Warning", month: "2025-05", timestamp: "5/25/2025 11:30:08 AM", description: "ATMOSPHERE TEMP. Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GT MECH", type: "Low Warning", month: "2025-05", timestamp: "5/25/2025 11:40:08 AM", description: "LUBE OIL RETURN TEMP 1 Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GENERATOR", type: "Low Warning", month: "2025-05", timestamp: "5/25/2025 1:55:08 PM", description: "GENE BEARING TEMP(NDE) Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GB MECH", type: "High Warning", month: "2025-05", timestamp: "5/26/2025 10:05:08 AM", description: "GEAR SHAFT VIB 2-2 HISPD Deviation - Absolute" },
+            { plant: "PCMSB", train: "XT-07002", model: "GB MECH", type: "High Warning", month: "2025-05", timestamp: "5/26/2025 10:15:08 AM", description: "GEAR SHAFT VIB 2-1 HISPD Deviation - Absolute" },
+            { plant: "PCMSB", train: "C-201", model: "ST PERFORMANCE", type: "Low Warning", month: "2025-05", timestamp: "5/28/2025 11:40:08 PM", description: "ST BRG NDE VIB Y Deviation - Absolute" }
+        ];
+
+        let alertSeverityChart, trainChart;
+
+        function filterByMonth() {
+            const selectedMonth = document.getElementById('monthFilter').value;
+            let filteredAlerts = selectedMonth === 'all' ? allAlerts : allAlerts.filter(alert => alert.month === selectedMonth);
+            
+            updateDashboard(filteredAlerts);
+        }
+
+        function updateDashboard(alerts) {
+            // Update total count
+            const totalElement = document.getElementById('totalAlertsCount');
+            if (totalElement) {
+                totalElement.textContent = alerts.length;
+            }
+            
+            // Count severities
+            const severityCounts = alerts.reduce((acc, alert) => {
+                acc[alert.type] = (acc[alert.type] || 0) + 1;
+                return acc;
+            }, {});
+            
+            const highWarning = severityCounts['High Warning'] || 0;
+            const lowWarning = severityCounts['Low Warning'] || 0;
+            const highAlert = severityCounts['High Alert'] || 0;
+            
+            // Update severity display
+            const legendContainer = document.getElementById('severityLegend');
+            if (legendContainer) {
+                legendContainer.innerHTML = '';
+                
+                if (highAlert > 0) {
+                    legendContainer.innerHTML += `<div class="legend-item"><div class="legend-dot high-alert"></div><span>High Alert: ${highAlert}</span></div>`;
+                }
+                if (highWarning > 0) {
+                    legendContainer.innerHTML += `<div class="legend-item"><div class="legend-dot high-warning"></div><span>High Warning: ${highWarning}</span></div>`;
+                }
+                if (lowWarning > 0) {
+                    legendContainer.innerHTML += `<div class="legend-item"><div class="legend-dot low-warning"></div><span>Low Warning: ${lowWarning}</span></div>`;
+                }
+            }
+            
+            // Count by train
+            const trainCounts = alerts.reduce((acc, alert) => {
+                acc[alert.train] = (acc[alert.train] || 0) + 1;
+                return acc;
+            }, {});
+            
+            // Count by plant
+            const plant1Equipment = ["C-104", "C-201", "C-202", "C-1301", "C-1302"];
+            const plant2Equipment = ["C-13001", "C-02001"];
+            
+            let plant1Count = 0;
+            let plant2Count = 0;
+            
+            alerts.forEach(alert => {
+                if (alert.train === "XT-07002") {
+                    if (alert.model === "GT MECH" || alert.model === "GT COMBUSTION") {
+                        plant1Count++;
+                    } else {
+                        plant2Count++;
+                    }
+                } else if (plant1Equipment.includes(alert.train)) {
+                    plant1Count++;
+                } else if (plant2Equipment.includes(alert.train)) {
+                    plant2Count++;
+                }
+            });
+            
+            // Update train cards
+            document.querySelectorAll('.train-card').forEach(card => {
+                const train = card.getAttribute('data-train');
+                if (train) {
+                    const count = trainCounts[train] || 0;
+                    const countElement = card.querySelector('.train-count');
+                    if (countElement) {
+                        countElement.textContent = count;
+                    }
+                    card.style.display = count > 0 ? 'block' : 'none';
+                }
+            });
+            
+            // Update table
+            updateTable(alerts);
+            
+            // Update charts
+            updateCharts(highAlert, highWarning, lowWarning, plant1Count, plant2Count);
+        }
+
+        function updateTable(alerts) {
+            const tbody = document.getElementById('alertTableBody');
+            if (!tbody) return;
+            
+            // Clear existing rows
+            tbody.innerHTML = '';
+            
+            // Add filtered alerts
+            alerts.forEach(alert => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${alert.plant}</td>
+                    <td>${alert.train}</td>
+                    <td>${alert.model}</td>
+                    <td>${alert.description}</td>
+                    <td>${alert.type}</td>
+                    <td>${alert.timestamp}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Add total row
+            const totalRowElement = document.createElement('tr');
+            totalRowElement.style.backgroundColor = '#f8f9fa';
+            totalRowElement.style.fontWeight = 'bold';
+            totalRowElement.innerHTML = `<td colspan="5">Total Alerts</td><td>${alerts.length}</td>`;
+            tbody.appendChild(totalRowElement);
+        }
+
+        function updateCharts(highAlert, highWarning, lowWarning, plant1Count, plant2Count) {
+            // Update severity chart
+            if (alertSeverityChart) {
+                const labels = [];
+                const data = [];
+                const colors = [];
+                
+                if (highAlert > 0) {
+                    labels.push(`High Alert (${highAlert})`);
+                    data.push(highAlert);
+                    colors.push('#e74c3c');
+                }
+                if (highWarning > 0) {
+                    labels.push(`High Warning (${highWarning})`);
+                    data.push(highWarning);
+                    colors.push('#f39c12');
+                }
+                if (lowWarning > 0) {
+                    labels.push(`Low Warning (${lowWarning})`);
+                    data.push(lowWarning);
+                    colors.push('#f1c40f');
+                }
+                
+                alertSeverityChart.data.labels = labels;
+                alertSeverityChart.data.datasets[0].data = data;
+                alertSeverityChart.data.datasets[0].backgroundColor = colors;
+                alertSeverityChart.update();
+            }
+            
+            // Update plant comparison chart
+            if (trainChart) {
+                trainChart.data.datasets[0].data = [plant1Count, plant2Count];
+                trainChart.update();
+            }
+        }
+
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Alert Severity Pie Chart
+            const alertSeverityCtx = document.getElementById('alertSeverityChart').getContext('2d');
+            alertSeverityChart = new Chart(alertSeverityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High Warning (5)', 'Low Warning (11)'],
+                    datasets: [{
+                        data: [5, 11],
+                        backgroundColor: ['#f39c12', '#f1c40f'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Plant Comparison Chart
+            const trainCtx = document.getElementById('trainChart').getContext('2d');
+            trainChart = new Chart(trainCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Plant 1', 'Plant 2'],
+                    datasets: [{
+                        label: 'Alert Count',
+                        data: [15, 1],
+                        backgroundColor: ['#3498db', '#9b59b6'],
+                        borderColor: '#2c3e50',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 16,
+                            grid: {
+                                color: '#ecf0f1'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Add animation to cards on load
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PETRONAS Machine Monitoring Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .filter-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .filter-section select {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-section select:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+        }
+        
+        .filter-section select option {
+            background: #2a5298;
+            color: white;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        
+        .summary-section {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 2fr 2fr;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border: 1px solid #f0f0f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .total-alerts {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .total-number {
+            font-size: 4em;
+            font-weight: 700;
+            margin: 20px 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .total-label {
+            font-size: 1.3em;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+        
+        .card-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 15px;
+        }
+        
+        .alert-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .alert-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 6px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8em;
+        }
+        
+        .alert-table th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+        
+        .alert-table th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+        
+        .alert-table td {
+            padding: 8px 6px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 0.75em;
+            vertical-align: top;
+        }
+        
+        .alert-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .severity-legend {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+        
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .high-alert { background-color: #e74c3c; }
+        .high-warning { background-color: #f39c12; }
+        .low-warning { background-color: #f1c40f; }
+        .low-alert { background-color: #95a5a6; }
+        
+        .plant-section {
+            margin-top: 15px;
+        }
+        
+        .plant-equipment {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .equipment-item {
+            padding: 5px 0;
+            font-size: 0.9em;
+            color: #2c3e50;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .equipment-item:last-child {
+            border-bottom: none;
+        }
+        
+        .trains-section {
+            grid-column: 1 / -1;
+        }
+        
+        .trains-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .train-card {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .train-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+        }
+        
+        .train-number {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .train-count {
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                padding: 15px;
+                gap: 20px;
+            }
+            
+            .summary-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .total-number {
+                font-size: 3em;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .header p {
+                font-size: 1em;
+            }
+            
+            .filter-section select {
+                width: 100%;
+                max-width: 250px;
+                margin-top: 10px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .card-title {
+                font-size: 1.2em;
+            }
+            
+            .trains-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 10px;
+            }
+            
+            .train-card {
+                padding: 12px;
+            }
+            
+            .train-number {
+                font-size: 1em;
+            }
+            
+            .train-count {
+                font-size: 1.5em;
+            }
+            
+            .alert-table {
+                font-size: 0.8em;
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .alert-table th,
+            .alert-table td {
+                padding: 6px 4px;
+                font-size: 0.7em;
+            }
+            
+            .severity-legend {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .legend-item {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .dashboard-container {
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 15px 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+                margin-bottom: 5px;
+            }
+            
+            .header p {
+                font-size: 0.9em;
+                margin-bottom: 15px;
+            }
+            
+            .filter-section select {
+                padding: 6px 12px;
+                font-size: 0.9em;
+            }
+            
+            .dashboard-grid {
+                padding: 10px;
+                gap: 15px;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            .total-number {
+                font-size: 2.5em;
+                margin: 15px 0 8px 0;
+            }
+            
+            .total-label {
+                font-size: 1.1em;
+            }
+            
+            .card-title {
+                font-size: 1.1em;
+                margin-bottom: 15px;
+            }
+            
+            .trains-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .train-card {
+                padding: 10px;
+            }
+            
+            .train-number {
+                font-size: 0.9em;
+                margin-bottom: 3px;
+            }
+            
+            .train-count {
+                font-size: 1.3em;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+            
+            .alert-table {
+                font-size: 0.7em;
+            }
+            
+            .alert-table th,
+            .alert-table td {
+                padding: 4px 2px;
+                font-size: 0.65em;
+            }
+            
+            .severity-legend {
+                gap: 8px;
+            }
+            
+            .legend-item {
+                font-size: 0.8em;
+            }
+            
+            .legend-dot {
+                width: 10px;
+                height: 10px;
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+                padding: 25px;
+            }
+            
+            .summary-section {
+                grid-column: 1 / -1;
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+            }
+            
+            .trains-section {
+                grid-column: 1 / -1;
+            }
+            
+            .trains-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            }
+            
+            .chart-container {
+                height: 280px;
+            }
+            
+            .total-number {
+                font-size: 3.5em;
+            }
+        }
+        
+        @media (min-width: 1025px) and (max-width: 1200px) {
+            .dashboard-container {
+                max-width: 1200px;
+            }
+            
+            .dashboard-grid {
+                gap: 25px;
+                padding: 25px;
+            }
+            
+            .summary-section {
+                gap: 25px;
+            }
+            
+            .trains-grid {
+                grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            }
+        }
+        
+        @media (min-width: 1201px) {
+            .dashboard-container {
+                max-width: 1400px;
+            }
+            
+            .trains-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+        }
+        
+        /* Landscape orientation adjustments */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .header {
+                padding: 15px 30px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+                margin-bottom: 5px;
+            }
+            
+            .header p {
+                font-size: 1em;
+                margin-bottom: 10px;
+            }
+            
+            .filter-section {
+                margin-top: 10px;
+            }
+            
+            .chart-container {
+                height: 200px;
+            }
+            
+            .total-number {
+                font-size: 2.5em;
+                margin: 10px 0 5px 0;
+            }
+        }
+        
+        /* Print media */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .dashboard-container {
+                box-shadow: none;
+                border-radius: 0;
+                max-width: 100%;
+            }
+            
+            .header {
+                background: #2a5298 !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            
+            .filter-section {
+                display: none;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .card {
+                break-inside: avoid;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                border: 1px solid #ddd;
+            }
+            
+            .alert-table {
+                font-size: 0.8em;
+            }
+            
+            .train-card {
+                background: #3498db !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+        }
+        
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .legend-dot {
+                border-radius: 50%;
+            }
+            
+            .train-card::before {
+                background: linear-gradient(45deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+            }
+        }
+        
+        /* Touch device adjustments */
+        @media (hover: none) and (pointer: coarse) {
+            .card:hover {
+                transform: none;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            }
+            
+            .filter-section select {
+                padding: 12px 15px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .train-card {
+                padding: 18px 15px;
+            }
+        }
+        
+        /* Reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            .card {
+                transition: none;
+            }
+            
+            .train-card::before {
+                transition: none;
+            }
+            
+            .filter-section select {
+                transition: none;
+            }
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .dashboard-container {
+                background: #1a1a1a;
+                color: #ffffff;
+            }
+            
+            .card {
+                background: #2d2d2d;
+                border-color: #404040;
+                color: #ffffff;
+            }
+            
+            .alert-table {
+                background: #2d2d2d;
+                color: #ffffff;
+            }
+            
+            .alert-table th {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                color: #ffffff !important;
+                border-bottom: 2px solid #4a5568;
+            }
+            
+            .alert-table td {
+                background: #2d2d2d !important;
+                color: #e2e8f0 !important;
+                border-bottom: 1px solid #4a5568;
+            }
+            
+            .alert-table tr:hover {
+                background-color: #374151 !important;
+            }
+            
+            .alert-table tr:hover td {
+                background-color: #374151 !important;
+                color: #ffffff !important;
+            }
+            
+            /* Total row in dark mode */
+            .alert-table tr[style*="background-color: #f8f9fa"] {
+                background-color: #374151 !important;
+            }
+            
+            .alert-table tr[style*="background-color: #f8f9fa"] td {
+                background-color: #374151 !important;
+                color: #ffffff !important;
+                font-weight: bold;
+            }
+            
+            .equipment-item {
+                color: #e2e8f0;
+                border-bottom-color: #4a5568;
+            }
+            
+            .plant-equipment {
+                background: #374151;
+            }
+            
+            /* Filter dropdown in dark mode */
+            .filter-section select {
+                background: #2d2d2d !important;
+                color: #ffffff !important;
+                border-color: #4a5568 !important;
+            }
+            
+            .filter-section select option {
+                background: #2d2d2d !important;
+                color: #ffffff !important;
+            }
+            
+            /* Summary table rows in dark mode */
+            .alert-table tr[style*="background-color: #e8f5ff"] {
+                background-color: #1e3a8a !important;
+            }
+            
+            .alert-table tr[style*="background-color: #e8f5ff"] td {
+                background-color: #1e3a8a !important;
+                color: #ffffff !important;
+            }
+            
+            .alert-table tr[style*="background-color: #f3e8ff"] {
+                background-color: #581c87 !important;
+            }
+            
+            .alert-table tr[style*="background-color: #f3e8ff"] td {
+                background-color: #581c87 !important;
+                color: #ffffff !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>PETRONAS Machine Monitoring & Predictive Diagnostic</h1>
+            <p>Real-time Alert Management Dashboard - PCMSB Plant Operations</p>
+            <div class="filter-section">
+                <label for="monthFilter" style="margin-right: 10px; font-weight: 500;">Filter by Month:</label>
+                <select id="monthFilter" onchange="filterByMonth()" style="padding: 8px 15px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; font-size: 1em;">
+                    <option value="all">All Months</option>
+                    <option value="2025-04" selected>April 2025</option>
+                    <option value="2025-05">May 2025</option>
+                    <option value="2025-06">June 2025</option>
+                    <option value="2025-07">July 2025</option>
+                    <option value="2025-08">August 2025</option>
+                    <option value="2025-09">September 2025</option>
+                    <option value="2025-10">October 2025</option>
+                    <option value="2025-11">November 2025</option>
+                    <option value="2025-12">December 2025</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="summary-section">
+                <div class="card total-alerts">
+                    <div class="total-number" id="totalAlertsCount">16</div>
+                    <div class="total-label">Total Alerts</div>
+                    <div class="severity-legend" id="severityLegend" style="justify-content: center; margin-top: 20px;">
+                        <div class="legend-item">
+                            <div class="legend-dot high-warning"></div>
+                            <span>High Warning: 5</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot low-warning"></div>
+                            <span>Low Warning: 11</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Alert Severity Distribution</div>
+                    <div class="chart-container">
+                        <canvas id="alertSeverityChart"></canvas>
+                    </div>
+                    <div class="severity-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot high-warning"></div>
+                            <span>High Warning</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot low-warning"></div>
+                            <span>Low Warning</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Plant Comparison</div>
+                    <div class="chart-container">
+                        <canvas id="trainChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="trains-section">
+                <div class="card">
+                    <div class="card-title">Plant 1 Equipment Alerts</div>
+                    <div class="trains-grid" id="plant1Grid">
+                        <div class="train-card" data-train="XT-07002">
+                            <div class="train-number">XT-07002</div>
+                            <div class="train-count">6</div>
+                        </div>
+                        <div class="train-card" data-train="C-202">
+                            <div class="train-number">C-202</div>
+                            <div class="train-count">4</div>
+                        </div>
+                        <div class="train-card" data-train="C-104">
+                            <div class="train-number">C-104</div>
+                            <div class="train-count">4</div>
+                        </div>
+                        <div class="train-card" data-train="C-1301">
+                            <div class="train-number">C-1301</div>
+                            <div class="train-count">1</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-title" style="margin-top: 30px;">Plant 2 Equipment Alerts</div>
+                    <div class="trains-grid" id="plant2Grid">
+                        <div class="train-card" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);" data-train="C-13001">
+                            <div class="train-number">C-13001</div>
+                            <div class="train-count">1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="grid-column: 1 / -1;">
+                <div class="card-title">Detailed Alert Information</div>
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Plant</th>
+                            <th>Train</th>
+                            <th>Model</th>
+                            <th>Extended Description</th>
+                            <th>Alert Type</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alertTableBody">
+                        <tr data-month="2025-04"><td>PCMSB</td><td>XT-07002</td><td>GT COMBUSTION</td><td>T FUEL GAS Deviation - Absolute</td><td>High Warning</td><td>4/4/2025 12:49:33 PM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>C-1301</td><td>ST PERFORMANCE</td><td>LUBE OIL SUPPLY PRESS Deviation - Absolute</td><td>High Warning</td><td>4/6/2025 7:49:33 AM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>XT-07002</td><td>GT MECH</td><td>BEARING TEMP2 TURB. Deviation - Absolute</td><td>Low Warning</td><td>4/14/2025 7:04:33 PM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>C-202</td><td>SINGLE STG CENT COMP PERFORMANCE</td><td>CENT COMP SECONDARY SEAL GAS PRESS Deviation - Absolute</td><td>Low Warning</td><td>4/21/2025 2:59:37 AM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>C-202</td><td>SINGLE STG CENT COMP PERFORMANCE</td><td>CENT COMP NDE PRIMARY SEAL LEAK OFF FLOW Deviation - Absolute</td><td>Low Warning</td><td>4/21/2025 7:09:37 AM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>C-202</td><td>SINGLE STG CENT COMP PERFORMANCE</td><td>CENT COMP DE PRIMARY SEAL LEAK OFF FLOW Deviation - Absolute</td><td>High Warning</td><td>4/21/2025 8:14:37 AM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>C-104</td><td>ST PERFORMANCE</td><td>LUBE OIL SUPPLY PRESS Deviation - Absolute</td><td>High Warning</td><td>4/21/2025 8:29:25 PM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>C-104</td><td>ST PERFORMANCE</td><td>LUBE OIL SUPPLY PRESS 2 Deviation - Absolute</td><td>High Warning</td><td>4/21/2025 8:29:25 PM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>C-13001</td><td>MULTSTG CENT COMP PERFORMANCE</td><td>MAC INTERCOOLER INLET 3 PRESSURE Deviation - Absolute</td><td>Low Warning</td><td>4/21/2025 9:44:25 PM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>C-202</td><td>SINGLE STG CENT COMP PERFORMANCE</td><td>CENT COMP BRG NDE VIB Y Deviation - Absolute</td><td>Low Warning</td><td>4/22/2025 3:19:25 AM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>C-104</td><td>ST PERFORMANCE</td><td>ST BRG NDE TEMP Deviation - Absolute</td><td>Low Warning</td><td>4/22/2025 6:34:25 AM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>C-104</td><td>SINGLE STG CENT COMP PERFORMANCE</td><td>CENT COMP BRG DE VIB Y Deviation - Absolute</td><td>Low Warning</td><td>4/25/2025 11:14:25 PM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>XT-07002</td><td>GT MECH</td><td>LUBE OIL RETURN TEMP 2 Deviation - Absolute</td><td>Low Warning</td><td>4/30/2025 12:59:25 AM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>XT-07002</td><td>GT MECH</td><td>GEAR SCAVEN OIL TEMP 1 Deviation - Absolute</td><td>Low Warning</td><td>4/30/2025 1:14:25 AM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>XT-07002</td><td>GT MECH</td><td>GEAR SCAVEN OIL TEMP 4 Deviation - Absolute</td><td>Low Warning</td><td>4/30/2025 1:14:25 AM</td></tr>
+                        <tr data-month="2025-04"><td>PCMSB</td><td>XT-07002</td><td>GT MECH</td><td>LUBE OIL SUPPLY TEMP. Deviation - Absolute</td><td>Low Warning</td><td>4/30/2025 1:19:25 AM</td></tr>
+                        <tr style="background-color: #f8f9fa; font-weight: bold;" id="totalRow"><td colspan="5">Total Alerts</td><td>16</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+                <div class="card-title">Summary by Plant & Train</div>
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Plant</th>
+                            <th>Train</th>
+                            <th>Model</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background-color: #e8f5ff;"><td colspan="4"><strong>Plant 1 Equipment</strong></td></tr>
+                        <tr><td>Plant 1</td><td>XT-07002</td><td>GT COMBUSTION</td><td>1</td></tr>
+                        <tr><td>Plant 1</td><td>XT-07002</td><td>GT MECH</td><td>5</td></tr>
+                        <tr><td>Plant 1</td><td>C-202</td><td>SINGLE STG CENT COMP PERFORMANCE</td><td>4</td></tr>
+                        <tr><td>Plant 1</td><td>C-104</td><td>ST PERFORMANCE</td><td>3</td></tr>
+                        <tr><td>Plant 1</td><td>C-104</td><td>SINGLE STG CENT COMP PERFORMANCE</td><td>1</td></tr>
+                        <tr><td>Plant 1</td><td>C-1301</td><td>ST PERFORMANCE</td><td>1</td></tr>
+                        <tr style="background-color: #f3e8ff;"><td colspan="4"><strong>Plant 2 Equipment</strong></td></tr>
+                        <tr><td>Plant 2</td><td>C-13001</td><td>MULTSTG CENT COMP PERFORMANCE</td><td>1</td></tr>
+                        <tr style="background-color: #f8f9fa; font-weight: bold;"><td colspan="3">Total</td><td>16</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Alert Severity Pie Chart
+        const alertSeverityCtx = document.getElementById('alertSeverityChart').getContext('2d');
+        new Chart(alertSeverityCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['High Warning (5)', 'Low Warning (11)'],
+                datasets: [{
+                    data: [5, 11],
+                    backgroundColor: ['#f39c12', '#f1c40f'],
+                    borderWidth: 3,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        // Plant Comparison Chart
+        const trainCtx = document.getElementById('trainChart').getContext('2d');
+        new Chart(trainCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Plant 1', 'Plant 2'],
+                datasets: [{
+                    label: 'Alert Count',
+                    data: [15, 1],
+                    backgroundColor: ['#3498db', '#9b59b6'],
+                    borderColor: '#2c3e50',
+                    borderWidth: 1,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 16,
+                        grid: {
+                            color: '#ecf0f1'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Add animation to cards on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
