@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PETRONAS Machine Monitoring Dashboard - ABFSB Plant</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .filter-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .filter-section select {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-section select:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+        }
+        
+        .filter-section select option {
+            background: #2a5298;
+            color: white;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        
+        .summary-section {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 2fr 2fr;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border: 1px solid #f0f0f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .total-alerts {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .total-number {
+            font-size: 4em;
+            font-weight: 700;
+            margin: 20px 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .total-label {
+            font-size: 1.3em;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+        
+        .card-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 15px;
+        }
+        
+        .alert-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .alert-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .alert-table th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+        
+        .alert-table th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+        
+        .alert-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 0.8em;
+            vertical-align: top;
+        }
+        
+        .alert-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .severity-legend {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+        
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .high-alert { background-color: #e74c3c; }
+        .high-warning { background-color: #fd79a8; }
+        .low-warning { background-color: #a29bfe; }
+        
+        .equipment-section {
+            grid-column: 1 / -1;
+        }
+        
+        .equipment-card {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .equipment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+        }
+        
+        .equipment-name {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .equipment-count {
+            font-size: 2.5em;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .equipment-models {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .model-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .model-name {
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .model-count {
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                padding: 15px;
+                gap: 20px;
+            }
+            
+            .summary-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .total-number {
+                font-size: 3em;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .equipment-models {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>PETRONAS Machine Monitoring & Predictive Diagnostic</h1>
+            <p>Real-time Alert Management Dashboard - ABFSB Plant Operations</p>
+            <div class="filter-section">
+                <label for="monthFilter" style="margin-right: 10px; font-weight: 500;">Filter by Month:</label>
+                <select id="monthFilter" onchange="filterByMonth()">
+                    <option value="all">All Months</option>
+                    <option value="2025-04">April 2025</option>
+                    <option value="2025-05">May 2025</option>
+                    <option value="2025-06" selected>June 2025</option>
+                    <option value="2025-07">July 2025</option>
+                    <option value="2025-08">August 2025</option>
+                    <option value="2025-09">September 2025</option>
+                    <option value="2025-10">October 2025</option>
+                    <option value="2025-11">November 2025</option>
+                    <option value="2025-12">December 2025</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="summary-section">
+                <div class="card total-alerts">
+                    <div class="total-number" id="totalAlertsCount">7</div>
+                    <div class="total-label">Total Alerts</div>
+                    <div class="severity-legend" id="severityLegend">
+                        <div class="legend-item">
+                            <div class="legend-dot high-warning"></div>
+                            <span>High Warning: 1</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot low-warning"></div>
+                            <span>Low Warning: 6</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Alert Severity Distribution</div>
+                    <div class="chart-container">
+                        <canvas id="alertSeverityChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Model Performance Overview</div>
+                    <div class="chart-container">
+                        <canvas id="modelChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="equipment-section">
+                <div class="card">
+                    <div class="card-title">ABF 07-K001 SYNGAS COMP Equipment</div>
+                    <div class="equipment-card">
+                        <div class="equipment-name">ABF 07-K001</div>
+                        <div class="equipment-count" id="equipmentCount">7</div>
+                        <div class="equipment-models" id="modelGrid">
+                            <!-- Model cards will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="grid-column: 1 / -1;">
+                <div class="card-title">Detailed Alert Information</div>
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Plant</th>
+                            <th>Equipment</th>
+                            <th>Model</th>
+                            <th>Extended Description</th>
+                            <th>Alert Type</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alertTableBody">
+                        <!-- Alert data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ABFSB 07-K001 SYNGAS COMP Alert Dataset (Real Data Only)
+        const allAlerts = {
+            "2025-04": [],
+            "2025-05": [],
+            "2025-06": [
+                { plant: "ABFSB", equipment: "ABF 07-K001", model: "STG 1 SYNGAS COMP PERFORMANCE", type: "Low Warning", month: "2025-06", timestamp: "6/1/2025 10:29:22 PM", description: "Compressor common lube & seal oil supply temperature Actual Value" },
+                { plant: "ABFSB", equipment: "ABF 07-K001", model: "STG 2 SYNGAS COMP PERFORMANCE", type: "Low Warning", month: "2025-06", timestamp: "6/1/2025 10:29:22 PM", description: "Compressor common lube & seal oil supply temperature Actual Value" },
+                { plant: "ABFSB", equipment: "ABF 07-K001", model: "STG 3 SYNGAS COMP PERFORMANCE", type: "Low Warning", month: "2025-06", timestamp: "6/1/2025 10:29:22 PM", description: "Compressor common lube & seal oil supply temperature Actual Value" },
+                { plant: "ABFSB", equipment: "ABF 07-K001", model: "STG 3 SYNGAS COMP PERFORMANCE", type: "Low Warning", month: "2025-06", timestamp: "6/1/2025 10:29:22 PM", description: "Main oil tank level indication Deviation - Absolute" },
+                { plant: "ABFSB", equipment: "ABF 07-K001", model: "MULTISTG SYNGAS COMP PERFORMANCE", type: "Low Warning", month: "2025-06", timestamp: "6/1/2025 10:29:22 PM", description: "Main oil tank level indication Deviation - Absolute" },
+                { plant: "ABFSB", equipment: "ABF 07-K001", model: "MULTISTG SYNGAS COMP PERFORMANCE", type: "Low Warning", month: "2025-06", timestamp: "6/1/2025 10:29:22 PM", description: "Compressor common lube & seal oil supply temperature Deviation - Absolute" },
+                { plant: "ABFSB", equipment: "ABF 07-K001", model: "MULTISTG SYNGAS COMP PERFORMANCE", type: "High Warning", month: "2025-06", timestamp: "6/3/2025 1:44:22 PM", description: "Common lube oil supply pressure to compressor bearings Deviation - Absolute" }
+            ],
+            "2025-07": [],
+            "2025-08": [],
+            "2025-09": [],
+            "2025-10": [],
+            "2025-11": [],
+            "2025-12": []
+        };
+
+        let alertSeverityChart, modelChart;
+
+        function filterByMonth() {
+            const selectedMonth = document.getElementById('monthFilter').value;
+            let filteredAlerts = selectedMonth === 'all' ? Object.values(allAlerts).flat() : allAlerts[selectedMonth] || [];
+            
+            updateDashboard(filteredAlerts);
+        }
+
+        function updateDashboard(alerts) {
+            // Update total count
+            const totalElement = document.getElementById('totalAlertsCount');
+            const equipmentElement = document.getElementById('equipmentCount');
+            if (totalElement) {
+                totalElement.textContent = alerts.length;
+                equipmentElement.textContent = alerts.length;
+            }
+            
+            // Count severities
+            const severityCounts = alerts.reduce((acc, alert) => {
+                acc[alert.type] = (acc[alert.type] || 0) + 1;
+                return acc;
+            }, {});
+            
+            const highWarning = severityCounts['High Warning'] || 0;
+            const lowWarning = severityCounts['Low Warning'] || 0;
+            const highAlert = severityCounts['High Alert'] || 0;
+            
+            // Update severity display
+            const legendContainer = document.getElementById('severityLegend');
+            if (legendContainer) {
+                legendContainer.innerHTML = '';
+                
+                if (highAlert > 0) {
+                    legendContainer.innerHTML += `<div class="legend-item"><div class="legend-dot high-alert"></div><span>High Alert: ${highAlert}</span></div>`;
+                }
+                if (highWarning > 0) {
+                    legendContainer.innerHTML += `<div class="legend-item"><div class="legend-dot high-warning"></div><span>High Warning: ${highWarning}</span></div>`;
+                }
+                if (lowWarning > 0) {
+                    legendContainer.innerHTML += `<div class="legend-item"><div class="legend-dot low-warning"></div><span>Low Warning: ${lowWarning}</span></div>`;
+                }
+            }
+            
+            // Update model breakdown
+            updateModelGrid(alerts);
+            
+            // Update table
+            updateTable(alerts);
+            
+            // Update charts
+            updateCharts(highAlert, highWarning, lowWarning, alerts);
+        }
+
+        function updateModelGrid(alerts) {
+            const modelGrid = document.getElementById('modelGrid');
+            if (!modelGrid) return;
+
+            // Count by model
+            const modelCounts = alerts.reduce((acc, alert) => {
+                acc[alert.model] = (acc[alert.model] || 0) + 1;
+                return acc;
+            }, {});
+
+            // Clear and populate model grid
+            modelGrid.innerHTML = '';
+            
+            Object.entries(modelCounts).forEach(([model, count]) => {
+                const modelCard = document.createElement('div');
+                modelCard.className = 'model-card';
+                modelCard.innerHTML = `
+                    <div class="model-name">${model}</div>
+                    <div class="model-count">${count}</div>
+                `;
+                modelGrid.appendChild(modelCard);
+            });
+
+            // If no alerts, show empty state
+            if (Object.keys(modelCounts).length === 0) {
+                modelGrid.innerHTML = '<div class="model-card"><div class="model-name">No alerts for selected month</div><div class="model-count">0</div></div>';
+            }
+        }
+
+        function updateTable(alerts) {
+            const tbody = document.getElementById('alertTableBody');
+            if (!tbody) return;
+            
+            // Clear existing rows
+            tbody.innerHTML = '';
+            
+            // Add filtered alerts
+            alerts.forEach(alert => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${alert.plant}</td>
+                    <td>${alert.equipment}</td>
+                    <td>${alert.model}</td>
+                    <td>${alert.description}</td>
+                    <td>${alert.type}</td>
+                    <td>${alert.timestamp}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Add total row
+            const totalRowElement = document.createElement('tr');
+            totalRowElement.style.backgroundColor = '#f8f9fa';
+            totalRowElement.style.fontWeight = 'bold';
+            totalRowElement.innerHTML = `<td colspan="5">Total Alerts</td><td>${alerts.length}</td>`;
+            tbody.appendChild(totalRowElement);
+        }
+
+        function updateCharts(highAlert, highWarning, lowWarning, alerts) {
+            // Update severity chart
+            if (alertSeverityChart) {
+                const labels = [];
+                const data = [];
+                const colors = [];
+                
+                if (highAlert > 0) {
+                    labels.push(`High Alert (${highAlert})`);
+                    data.push(highAlert);
+                    colors.push('#e74c3c');
+                }
+                if (highWarning > 0) {
+                    labels.push(`High Warning (${highWarning})`);
+                    data.push(highWarning);
+                    colors.push('#fd79a8');
+                }
+                if (lowWarning > 0) {
+                    labels.push(`Low Warning (${lowWarning})`);
+                    data.push(lowWarning);
+                    colors.push('#a29bfe');
+                }
+                
+                alertSeverityChart.data.labels = labels;
+                alertSeverityChart.data.datasets[0].data = data;
+                alertSeverityChart.data.datasets[0].backgroundColor = colors;
+                alertSeverityChart.update();
+            }
+            
+            // Update model performance chart
+            if (modelChart) {
+                const modelCounts = alerts.reduce((acc, alert) => {
+                    acc[alert.model] = (acc[alert.model] || 0) + 1;
+                    return acc;
+                }, {});
+                
+                const modelNames = Object.keys(modelCounts);
+                const modelData = Object.values(modelCounts);
+                
+                modelChart.data.labels = modelNames;
+                modelChart.data.datasets[0].data = modelData;
+                modelChart.update();
+            }
+        }
+
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Alert Severity Pie Chart
+            const alertSeverityCtx = document.getElementById('alertSeverityChart').getContext('2d');
+            alertSeverityChart = new Chart(alertSeverityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High Warning (1)', 'Low Warning (6)'],
+                    datasets: [{
+                        data: [1, 6],
+                        backgroundColor: ['#fd79a8', '#a29bfe'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Model Performance Chart
+            const modelCtx = document.getElementById('modelChart').getContext('2d');
+            modelChart = new Chart(modelCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['STG 1', 'STG 2', 'STG 3', 'MULTISTG'],
+                    datasets: [{
+                        label: 'Alert Count',
+                        data: [1, 1, 2, 3],
+                        backgroundColor: ['#74b9ff', '#a29bfe', '#fd79a8', '#fdcb6e'],
+                        borderRadius: 8,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#ecf0f1'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize with June 2025 data
+            filterByMonth();
+
+            // Add animation to cards on load
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
