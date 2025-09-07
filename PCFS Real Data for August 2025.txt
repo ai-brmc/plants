@@ -1,0 +1,102 @@
+PRiSM Detected Alert For TURB IND STM PR Deviation - Absolute (PCFS.K-12-01.12PI-027A.PV) in the PCFS K-12-01 ST PERFORMANCE Model
+
+Project	: PCFS K-12-01 ST PERFORMANCE
+Profile	: PCFS K-12-01 ST PERFORMANCE
+Point	: TURB IND STM PR Deviation - Absolute (PCFS.K-12-01.12PI-027A.PV)
+
+Extended ID		: PCFS K-12-01 ST PERFORMANCE TURB IND STM PR Deviation - Absolute
+Extended Description	: PCFS K-12-01 ST PERFORMANCE TURB IND STM PR Deviation - Absolute
+
+Alert Type		: Low Warning
+Alert Threshold		: -0.8
+Alert Window		: 11  Of The Last  12 Events
+
+Event Timestamp		: 8/27/2025 6:02:41 PM
+Event Value		: -2.236
+
+
+PRiSM Detected Alert For HP CMP JR   BRG T NDE A Deviation - Absolute (PCFS.K-12-01.12TIA-420A.PV) in the PCFS K-12-01 PROCESS AIR COMP HP PERFORMANCE Model
+
+Project	: PCFS K-12-01 PROCESS AIR COMP HP PERFORMANCE
+Profile	: PCFS K-12-01 PROCESS AIR COMP HP PERFORMANCE
+Point	: HP CMP JR   BRG T NDE A Deviation - Absolute (PCFS.K-12-01.12TIA-420A.PV)
+
+Extended ID		: PCFS K-12-01 PROCESS AIR COMP HP PERFORMANCE HP CMP JR   BRG T NDE A Deviation - Absolute
+Extended Description	: PCFS K-12-01 PROCESS AIR COMP HP PERFORMANCE HP CMP JR   BRG T NDE A Deviation - Absolute
+
+Alert Type		: Low Warning
+Alert Threshold		: -6.5
+Alert Window		: 11  Of The Last  12 Events
+
+Event Timestamp		: 8/27/2025 6:02:41 PM
+Event Value		: -10.001
+PRiSM Detected Alert For K-12-01 OIL RESERVR LVL Deviation - Absolute (PCFS.K-12-01.12LIA-405.PV) in the PCFS K-12-01 PROCESS AIR COMP HP PERFORMANCE Model
+
+Project	: PCFS K-12-01 PROCESS AIR COMP HP PERFORMANCE
+Profile	: PCFS K-12-01 PROCESS AIR COMP HP PERFORMANCE
+Point	: K-12-01 OIL RESERVR LVL Deviation - Absolute (PCFS.K-12-01.12LIA-405.PV)
+
+Extended ID		: PCFS K-12-01 PROCESS AIR COMP HP PERFORMANCE K-12-01 OIL RESERVR LVL Deviation - Absolute
+Extended Description	: PCFS K-12-01 PROCESS AIR COMP HP PERFORMANCE K-12-01 OIL RESERVR LVL Deviation - Absolute
+
+Alert Type		: High Alert
+Alert Threshold		: 5
+Alert Window		: 11  Of The Last  12 Events
+
+Event Timestamp		: 8/27/2025 6:02:41 PM
+Event Value		: 6.919
+
+
+
+PRiSM Detected Alert For LP CMP THR  BRG T ACT  A Deviation - Absolute (PCFS.K-12-01.12TIA-417A.PV) in the PCFS K-12-01 PROCESS AIR COMP LP PERFORMANCE Model
+
+Project	: PCFS K-12-01 PROCESS AIR COMP LP PERFORMANCE
+Profile	: PCFS K-12-01 PROCESS AIR COMP LP PERFORMANCE
+Point	: LP CMP THR  BRG T ACT  A Deviation - Absolute (PCFS.K-12-01.12TIA-417A.PV)
+
+Extended ID		: PCFS K-12-01 PROCESS AIR COMP LP PERFORMANCE LP CMP THR  BRG T ACT  A Deviation - Absolute
+Extended Description	: PCFS K-12-01 PROCESS AIR COMP LP PERFORMANCE LP CMP THR  BRG T ACT  A Deviation - Absolute
+
+Alert Type		: High Warning
+Alert Threshold		: 3
+Alert Window		: 11  Of The Last  12 Events
+
+Event Timestamp		: 8/27/2025 6:02:41 PM
+Event Value		: 4.001
+
+PRiSM Detected Alert For ST INLET PRESS Deviation - Absolute (PCFS.53PICA-213.PV) in the PCFS K-12-01 ST PERFORMANCE Model
+
+Project	: PCFS K-12-01 ST PERFORMANCE
+Profile	: PCFS K-12-01 ST PERFORMANCE
+Point	: ST INLET PRESS Deviation - Absolute (PCFS.53PICA-213.PV)
+
+Extended ID		: PCFS K-12-01 ST PERFORMANCE ST INLET PRESS Deviation - Absolute
+Extended Description	: PCFS K-12-01 ST PERFORMANCE ST INLET PRESS Deviation - Absolute
+
+Alert Type		: High Alert
+Alert Threshold		: 0.5
+Alert Window		: 11  Of The Last  12 Events
+
+Event Timestamp		: 8/27/2025 7:07:41 PM
+Event Value		: 0.663
+
+
+
+
+PRiSM Detected Alert For ST INLET PRESS Deviation - Absolute (PCFS.53PICA-213.PV) in the PCFS K-12-01 ST PERFORMANCE Model
+
+Project	: PCFS K-12-01 ST PERFORMANCE
+Profile	: PCFS K-12-01 ST PERFORMANCE
+Point	: ST INLET PRESS Deviation - Absolute (PCFS.53PICA-213.PV)
+
+Extended ID		: PCFS K-12-01 ST PERFORMANCE ST INLET PRESS Deviation - Absolute
+Extended Description	: PCFS K-12-01 ST PERFORMANCE ST INLET PRESS Deviation - Absolute
+
+Alert Type		: High Alert
+Alert Threshold		: 0.5
+Alert Window		: 11  Of The Last  12 Events
+
+Event Timestamp		: 8/28/2025 7:47:41 AM
+Event Value		: 0.711
+
+
