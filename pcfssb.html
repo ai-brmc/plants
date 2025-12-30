@@ -1,0 +1,1139 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PETRONAS PCFS Machine Monitoring Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .filter-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+        
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid #e8ecf0;
+            border-radius: 8px;
+            background: white;
+            font-size: 1rem;
+            min-width: 180px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .filter-stats {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            border-top: 4px solid #3498db;
+        }
+        
+        .summary-card.high-alert {
+            border-top-color: #e74c3c;
+        }
+        
+        .summary-card.high-warning {
+            border-top-color: #f39c12;
+        }
+        
+        .summary-card.low-warning {
+            border-top-color: #27ae60;
+        }
+        
+        .summary-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        .summary-label {
+            font-size: 1rem;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            width: 100%;
+            min-width: 0;
+        }
+        
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .equipment-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            border-bottom: 2px solid #e8ecf0;
+            padding-bottom: 10px;
+        }
+        
+        .system-group {
+            margin-bottom: 30px;
+        }
+        
+        .system-header {
+            background: #ecf0f1;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .system-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .equipment-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        
+        .equipment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .equipment-card.critical {
+            border-left-color: #e74c3c;
+            background: #fdf2f2;
+        }
+        
+        .equipment-card.warning {
+            border-left-color: #f39c12;
+            background: #fefaf5;
+        }
+        
+        .equipment-card.normal {
+            border-left-color: #27ae60;
+            background: #f8fbf8;
+        }
+        
+        .equipment-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .equipment-count {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 10px 0;
+            color: #3498db;
+        }
+        
+        .equipment-card.critical .equipment-count {
+            color: #e74c3c;
+        }
+        
+        .equipment-card.warning .equipment-count {
+            color: #f39c12;
+        }
+        
+        .equipment-card.normal .equipment-count {
+            color: #27ae60;
+        }
+        
+        .equipment-type {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .table-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        .alert-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .alert-table th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #e8ecf0;
+        }
+        
+        .alert-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e8ecf0;
+            vertical-align: middle;
+            text-align: left;
+        }
+        
+        .alert-table td:nth-child(4) {
+            text-align: center;
+        }
+        
+        .alert-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .alert-type {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+            min-width: 100px;
+            white-space: nowrap;
+        }
+        
+        .alert-type.high-alert {
+            background: #fdf2f2;
+            color: #e74c3c;
+            border: 1px solid #fadbd8;
+        }
+        
+        .alert-type.high-warning {
+            background: #fefaf5;
+            color: #f39c12;
+            border: 1px solid #fdeaa7;
+        }
+        
+        .alert-type.low-warning {
+            background: #f8fbf8;
+            color: #27ae60;
+            border: 1px solid #d5f4e6;
+        }
+        
+        @media (max-width: 1024px) {
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .equipment-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .summary-number {
+                font-size: 2rem;
+            }
+        }
+            .heatmap-wrapper { overflow-x: auto; }
+        .heatmap-table { width: 100%; border-collapse: collapse; }
+        .heatmap-table th, .heatmap-table td { border: 1px solid #e8ecf0; padding: 8px; text-align: center; font-size: 0.9rem; }
+        .heatmap-table th { background: #f8fafc; font-weight: 600; }
+        .heat-cell { border-radius: 6px; min-width: 60px; }        .details-grid { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; margin-top: 10px; }
+        @media (max-width: 1024px) { .details-grid { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; margin-top: 10px; } }
+        .table-wrapper { max-height: 520px; overflow: auto; }
+        .alert-table thead th { position: sticky; top: 0; background: #fff; z-index: 1; }        /* Make Recent Alert Details span full width below the overview */
+        .table-section { grid-column: 1 / -1; }        /* Make Equipment Overview full width within details grid */
+        .details-grid .equipment-section { grid-column: 1 / -1; }</style>
+</head>
+<body>
+    <div class="header">
+        <h1>PETRONAS PCFS Machine Monitoring Dashboard</h1>
+        <p>Real-Time Alert Management & Predictive Diagnostics (Updated November 2025)</p>
+    </div>
+
+    <div class="container">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-group">
+                <span class="filter-label">Filter by Month:</span>
+                
+                <select class="filter-select" id="monthFilter">
+                    <option value="all">All Months (May-Dec 2025)</option>
+                    <option value="2025-05">May 2025</option>
+                    <option value="2025-06">June 2025</option>
+                    <option value="2025-07">July 2025</option>
+                    <option value="2025-08">August 2025</option>
+                    <option value="2025-09">September 2025</option>
+                    <option value="2025-10">October 2025</option>
+                    <option value="2025-11" selected>November 2025</option>
+                    <option value="2025-12">December 2025</option>
+                </select>
+            </div>
+            <div class="filter-stats" id="filterStats">
+                Showing all 112 alerts
+            </div>
+            <div id="noDataMessage" style="margin-top: 15px; font-weight: 600; color: #3498db; display: none; text-align: center;">
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="summary-number" id="totalAlertsCount">67</div>
+                <div class="summary-label">Total Alerts</div>
+            </div>
+            <div class="summary-card high-alert">
+                <div class="summary-number" id="highAlertCount">6</div>
+                <div class="summary-label">High Alerts</div>
+            </div>
+            <div class="summary-card high-warning">
+                <div class="summary-number" id="highWarningCount">9</div>
+                <div class="summary-label">High Warnings</div>
+            </div>
+            <div class="summary-card low-warning">
+                <div class="summary-number" id="lowWarningCount">52</div>
+                <div class="summary-label">Low Warnings</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <div class="chart-title">Alert Severity Distribution</div>
+                <div class="chart-container">
+                    <canvas id="alertSeverityChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Top Equipment by Alert Count</div>
+                <div class="chart-container">
+                    <canvas id="equipmentChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+                <!-- Additional Charts -->
+        <div class="charts-section">
+            </div>
+<!-- Equipment Overview -->
+        <div class="details-grid">
+            <div class="chart-card">
+                <div class="chart-title">Alerts by Hour of Day</div>
+                <div class="chart-container">
+                    <canvas id="alertsByHourChart"></canvas>
+                </div>
+            </div>
+        <div class="equipment-section">
+            <div class="section-title">Equipment Overview</div>
+            <div id="equipmentOverview">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Alert Details Table -->
+        <div class="table-section">
+            <div class="section-title">Recent Alert Details</div>
+            <div class="table-wrapper">
+                <table class="alert-table">
+                    <thead>
+                        <tr>
+                            <th>Equipment</th>
+                            <th>System</th>
+                            <th>Description</th>
+                            <th>Severity</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alertTableBody">
+                        <!-- Table content will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        const alertData = [
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP HP PERFORMANCE", description: "LP COM 2 STG SUC TEM Deviation - Absolute", type: "High Alert", timestamp: "5/15/2025 2:19:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP HP PERFORMANCE", description: "HP COM 3 STG DISCH PR Deviation - Absolute", type: "Low Warning", timestamp: "5/15/2025 2:19:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "TURB THR BRG T ACT  A Deviation - Absolute", type: "Low Warning", timestamp: "5/15/2025 2:34:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP LP PERFORMANCE", description: "LP COM 2 STG SUC PR Deviation - Absolute", type: "Low Warning", timestamp: "5/15/2025 2:49:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP LP PERFORMANCE", description: "LP COMP LEAKOFF L PRSNDE Deviation - Absolute", type: "High Warning", timestamp: "5/15/2025 3:44:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP HP PERFORMANCE", description: "HP COMP LP  LK-OF PRSNDE Deviation - Absolute", type: "High Warning", timestamp: "5/15/2025 3:54:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "TURB JR BRG T Gov  A Deviation - Absolute", type: "Low Warning", timestamp: "5/15/2025 3:59:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "TURB JR BRG T Exh  A Deviation - Absolute", type: "Low Warning", timestamp: "5/15/2025 3:59:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "SM K19-01 LO HDR PT Deviation - Absolute", type: "High Warning", timestamp: "5/15/2025 3:59:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "K-19-01 ECV LVDT Deviation - Absolute", type: "Low Warning", timestamp: "5/15/2025 4:24:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "KT-19-01 SH  INLET DP Deviation - Absolute", type: "Low Warning", timestamp: "5/15/2025 4:29:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP LP PERFORMANCE", description: "LP COMP SEAL GAS SUPP DP Actual Value", type: "Low Warning", timestamp: "5/15/2025 4:39:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "K-19-01 TURBACTUAL SPEED Deviation - Absolute", type: "Low Warning", timestamp: "5/15/2025 4:39:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "ST INLET PRESS Deviation - Absolute", type: "Low Warning", timestamp: "5/15/2025 4:44:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "KT-19-01 SH INLET TEMP Deviation - Absolute", type: "Low Warning", timestamp: "5/15/2025 5:59:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "TURB EXT STM FLW Deviation - Absolute", type: "High Warning", timestamp: "5/15/2025 8:24:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "TURB EXT STM TEM Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 12:54:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "HP COM SUCT PR Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 1:49:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "K-12-01 3RD DISCHARGE PT Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 1:49:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "K-12-01 4TH SUC TT TYP-K Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 1:49:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "4TH DISCH-  ENGNG VE Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 1:49:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "HP COMP DISC TT TYP-K Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 1:49:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "K-12-01 4TH SUCTION PT Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 1:49:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "HP COM ANTI SUR CV POS Deviation - Absolute", type: "High Alert", timestamp: "5/16/2025 1:49:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "HP CMP JR   BRG T DE A Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 1:49:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "HP COM SUCT TEMP Deviation - Absolute", type: "High Warning", timestamp: "5/16/2025 2:04:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "ST PERFORMANCE", description: "P-12-01A/B  DISCH CL Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 2:24:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "ST PERFORMANCE", description: "MCOND WTR DP LVL RET TX Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 2:29:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "12FV-004   CTL SIGNAL Deviation - Absolute", type: "High Alert", timestamp: "5/16/2025 2:29:25 AM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "TURB AX POS A Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 2:59:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP LP PERFORMANCE", description: "K-12-01 1ST DIS TT TYP-K Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 2:59:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP LP PERFORMANCE", description: "K-12-01 1ST DISCHARGE PT Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 2:59:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP LP PERFORMANCE", description: "OIL RESERVR TT TYP-K Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 2:59:25 AM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP HP PERFORMANCE", description: "HP CMP AX   POS A Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 3:24:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "ST PERFORMANCE", description: "TURB JR BRG T Gov  A Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 4:44:25 AM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP HP PERFORMANCE", description: "HP COMP LP  LK-OF PRS DE Deviation - Absolute", type: "High Warning", timestamp: "5/16/2025 8:09:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "K-12 HP COMPDISCH FLW Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 8:24:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "K-12-01 3RD DIS TT TYP-K Deviation - Absolute", type: "High Warning", timestamp: "5/16/2025 8:39:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP LP PERFORMANCE", description: "K-12 LP COMPDISCH FLW Deviation - Absolute", type: "High Alert", timestamp: "5/16/2025 11:29:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP LP PERFORMANCE", description: "LP COM DISCH PR Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 11:29:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP LP PERFORMANCE", description: "K-12-01 2ND SUCTION PT Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 11:29:25 AM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP LP PERFORMANCE", description: "LP COM SUCT TEMP Deviation - Absolute", type: "High Warning", timestamp: "5/16/2025 12:39:25 PM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "ST PERFORMANCE", description: "SL->KT-12-01 TEMPERATURE Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 2:29:25 PM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "ST PERFORMANCE", description: "KT-12-01 SL INLET DP Deviation - Absolute", type: "Low Warning", timestamp: "5/16/2025 2:29:25 PM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP LP PERFORMANCE", description: "K-12-01 2ND SUC TT TYP-K Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:29:25 AM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "GR JR BRG T LSS COP E-A Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:34:25 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP LP PERFORMANCE", description: "LP COMP 1ST STG SUCT TMP Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:34:25 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "ST PERFORMANCE", description: "SH->KT-31-01FLOW Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:34:25 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "GR JR BRG T HSS COP E-A Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:34:25 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "GR JR BRG T HSS FR E-A Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:34:25 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "ST PERFORMANCE", description: "KT-31-01 SMUOUTLET TEMP Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:34:25 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "ST PERFORMANCE", description: "TURB JR BRG T Exh  A Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:34:25 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "ST PERFORMANCE", description: "EXTRACTION  FLOW Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:34:25 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP HP PERFORMANCE", description: "V-31-03     LEVEL Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:34:25 PM"},
+            {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING STG 4 ANTISURGE CTRL VLV DEMAND Deviation - Absolute", type: "High Warning", timestamp: "5/17/2025 12:44:25 PM"},
+            {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING BRG NDE VIB X Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:44:25 PM"},
+            {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING BRG DE VIB X Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 12:44:25 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP HP PERFORMANCE", description: "K-31-01 OIL RESERVR TEMP Deviation - Absolute", type: "Low Warning", timestamp: "5/17/2025 1:39:25 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "HP CMP JR BRG  T NDE A Deviation - Absolute", type: "High Alert", timestamp: "5/17/2025 10:19:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP LP PERFORMANCE", description: "19FV-008 CTRL SIGN Deviation - Absolute", type: "High Alert", timestamp: "5/17/2025 3:04:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP LP PERFORMANCE", description: "LP/C 1 STG A/S CV OP Deviation - Absolute", type: "High Alert", timestamp: "5/17/2025 3:04:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP HP PERFORMANCE", description: "19FV-010 CTRL SIGN Deviation - Absolute", type: "High Alert", timestamp: "5/18/2025 12:34:25 PM"},
+            {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP HP PERFORMANCE", description: "HP/C 3 STG A/S CV OP Deviation - Absolute", type: "High Alert", timestamp: "5/18/2025 12:34:25 PM"},
+            {plant: "PCFS", equipment: "K-16-01", model: "ST PERFORMANCE", description: "ST INLET TEMP Deviation - Absolute", type: "Low Warning", timestamp: "5/18/2025 4:44:25 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP HP PERFORMANCE", description: "K-31-01F1A/BO/L PRESS Deviation - Absolute", type: "Low Warning", timestamp: "6/6/2025 5:19:22 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "GR Accelerometer (HSS) Actual Value", type: "High Alert", timestamp: "6/16/2025 7:24:22 AM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP LP PERFORMANCE", description: "LP CMP THR BRG T ACT  A Deviation - Absolute", type: "Low Warning", timestamp: "7/18/2025 11:35:28 AM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP HP PERFORMANCE", description: "K-31-01 4TH SUCTION TEMP Deviation - Absolute", type: "Low Warning", timestamp: "7/20/2025 1:30:28 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP LP PERFORMANCE", description: "LP CMP JR BRG  T DE A Deviation - Absolute", type: "Low Warning", timestamp: "7/20/2025 1:45:28 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP LP PERFORMANCE", description: "LP CMP JR BRG  T NDE A Deviation - Absolute", type: "Low Warning", timestamp: "7/20/2025 1:45:28 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "K-31-01 OIL RESERVR TEMP Deviation - Absolute", type: "Low Warning", timestamp: "7/20/2025 3:05:28 PM"},
+            {plant: "PCFS", equipment: "K-31-01", model: "ST PERFORMANCE", description: "MAIN COND   WTR LC VLV Deviation - Absolute", type: "High Warning", timestamp: "7/20/2025 3:10:28 PM"},
+            {plant: "PCFS", equipment: "K-12-01", model: "ST PERFORMANCE", description: "ST INLET PRESS Deviation - Absolute", type: "High Alert", timestamp: "7/20/2025 7:20:28 PM"}
+        ];
+
+        let alertSeverityChart;
+        let equipmentChart;
+        let filteredData = alertData;
+
+        function getMonthFromTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            return `${year}-${month}`;
+        }
+
+        function filterDataByMonth(selectedMonth) {
+            if (selectedMonth === 'all') {
+                return alertData;
+            }
+            return alertData.filter(alert => getMonthFromTimestamp(alert.timestamp) === selectedMonth);
+        }
+
+        function updateSummaryCards(data) {
+    const highAlert = data.filter(alert => alert.type === 'High Alert').length;
+    const highWarning = data.filter(alert => alert.type === 'High Warning').length;
+    const lowWarning = data.filter(alert => alert.type === 'Low Warning').length;
+    const lowAlert = data.filter(alert => alert.type === 'Low Alert').length;
+    const lowCombined = lowWarning + lowAlert;
+    const total = data.length;
+
+    const totalEl = document.getElementById('totalAlertsCount');
+    const haEl = document.getElementById('highAlertCount');
+    const hwEl = document.getElementById('highWarningCount');
+    const lwEl = document.getElementById('lowWarningCount');
+    if (totalEl) totalEl.textContent = total;
+    if (haEl) haEl.textContent = highAlert;
+    if (hwEl) hwEl.textContent = highWarning;
+    if (lwEl) lwEl.textContent = lowCombined; // show Low Warning + Low Alert
+
+    return { highAlert, highWarning, lowWarning, lowAlert, lowCombined, total };
+}
+
+        function updateAlertTable(data) {
+    const tbody = document.getElementById('alertTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    const alertsToShow = data;
+    alertsToShow.forEach(alert => {
+        const row = tbody.insertRow();
+        const alertTypeClass = alert.type.toLowerCase().replace(' ', '-');
+        row.innerHTML = `
+            <td><strong>${alert.equipment}</strong></td>
+            <td>${alert.model}</td>
+            <td>${alert.description}</td>
+            <td><span class="alert-type ${alertTypeClass}">${alert.type}</span></td>
+            <td>${alert.timestamp}</td>
+        `;
+    });
+}
+function updateEquipmentOverview(data) {
+            const equipmentOverview = document.getElementById('equipmentOverview');
+            equipmentOverview.innerHTML = '';
+
+            // Group alerts by equipment and model
+            const equipmentStats = {};
+            
+            data.forEach(alert => {
+                const equipmentKey = alert.equipment;
+                if (!equipmentStats[equipmentKey]) {
+                    equipmentStats[equipmentKey] = {
+                        systems: {},
+                        total: 0
+                    };
+                }
+
+                let systemKey = '';
+                let systemName = '';
+                
+                if (alert.model.includes('PROCESS AIR COMP HP')) {
+                    systemKey = 'HP_COMP';
+                    systemName = 'HP Compressor';
+                } else if (alert.model.includes('PROCESS AIR COMP LP')) {
+                    systemKey = 'LP_COMP';
+                    systemName = 'LP Compressor';
+                } else if (alert.model.includes('NH3 REFIGERATION COMP HP')) {
+                    systemKey = 'NH3_HP';
+                    systemName = 'NH3 HP Compressor';
+                } else if (alert.model.includes('NH3 REFIGERATION COMP LP')) {
+                    systemKey = 'NH3_LP';
+                    systemName = 'NH3 LP Compressor';
+                } else if (alert.model.includes('ST PERFORMANCE')) {
+                    systemKey = 'ST';
+                    systemName = 'Steam Turbine';
+                } else if (alert.model.includes('CO2 COMP HP')) {
+                    systemKey = 'CO2_HP';
+                    systemName = 'CO2 HP Compressor';
+                } else if (alert.model.includes('CO2 COMP LP')) {
+                    systemKey = 'CO2_LP';
+                    systemName = 'CO2 LP Compressor';
+                } else if (alert.model.includes('GB MECHANICAL')) {
+                    systemKey = 'GB';
+                    systemName = 'Gearbox Mechanical';
+                } else if (alert.model.includes('SYNGAS COMP HP')) {
+                    systemKey = 'SYNGAS_HP';
+                    systemName = 'Syngas HP Compressor';
+                } else if (alert.model.includes('SYNGAS COMP LP')) {
+                    systemKey = 'SYNGAS_LP';
+                    systemName = 'Syngas LP Compressor';
+                }
+
+                if (!equipmentStats[equipmentKey].systems[systemKey]) {
+                    equipmentStats[equipmentKey].systems[systemKey] = {
+                        name: systemName,
+                        count: 0,
+                        highAlert: 0,
+                        highWarning: 0,
+                        lowWarning: 0
+                    };
+                }
+
+                equipmentStats[equipmentKey].systems[systemKey].count++;
+                equipmentStats[equipmentKey].total++;
+
+                if (alert.type === 'High Alert') {
+                    equipmentStats[equipmentKey].systems[systemKey].highAlert++;
+                } else if (alert.type === 'High Warning') {
+                    equipmentStats[equipmentKey].systems[systemKey].highWarning++;
+                } else if (alert.type === 'Low Warning') {
+                    equipmentStats[equipmentKey].systems[systemKey].lowWarning++;
+                }
+            });
+
+            // Create equipment groups
+            Object.keys(equipmentStats).sort().forEach(equipmentKey => {
+                const equipment = equipmentStats[equipmentKey];
+                if (equipment.total === 0) return;
+
+                const systemGroup = document.createElement('div');
+                systemGroup.className = 'system-group';
+
+                let systemTitle = '';
+                if (equipmentKey === 'K-12-01') {
+                    systemTitle = 'K-12-01 Process Air System';
+                } else if (equipmentKey === 'K-19-01') {
+                    systemTitle = 'K-19-01 NH3 Refrigeration System';
+                } else if (equipmentKey === 'K-31-01') {
+                    systemTitle = 'K-31-01 CO2 Compressor System';
+                } else if (equipmentKey === 'K-16-01') {
+                    systemTitle = 'K-16-01 Syngas Compressor System';
+                }
+
+                systemGroup.innerHTML = `
+                    <div class="system-header">
+                        <h3 class="system-name">${systemTitle} (${equipment.total} alerts)</h3>
+                    </div>
+                    <div class="equipment-grid" id="grid-${equipmentKey}">
+                    </div>
+                `;
+
+                equipmentOverview.appendChild(systemGroup);
+
+                const grid = document.getElementById(`grid-${equipmentKey}`);
+                
+                Object.keys(equipment.systems).forEach(systemKey => {
+                    const system = equipment.systems[systemKey];
+                    
+                    let cardClass = 'normal';
+                    let priorityText = 'Low Warning';
+                    
+                    if (system.highAlert > 0) {
+                        cardClass = 'critical';
+                        priorityText = 'High Alert';
+                    } else if (system.highWarning > 0) {
+                        cardClass = 'warning';
+                        priorityText = 'High Warning';
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = `equipment-card ${cardClass}`;
+                    card.innerHTML = `
+                        <div class="equipment-name">${system.name}</div>
+                        <div class="equipment-count">${system.count}</div>
+                        <div class="equipment-type">${priorityText}</div>
+                    `;
+                    
+                    grid.appendChild(card);
+                });
+            });
+        }
+
+        function updateFilterStats(selectedMonth, total) {
+            const filterStats = document.getElementById('filterStats');
+            if (selectedMonth === 'all') {
+                filterStats.textContent = `Showing all ${total} alerts`;
+            } else {
+                                const monthNames = {
+                    '2025-05': 'May 2025',
+                    '2025-06': 'June 2025',
+                    '2025-07': 'July 2025',
+                    '2025-08': 'August 2025',
+                    '2025-09': 'September 2025',
+                    '2025-10': 'October 2025',
+                '2025-11': 'November 2025'
+                };
+                filterStats.textContent = `Showing ${total} alerts for ${monthNames[selectedMonth]}`;
+            }
+        }
+
+        function updateCharts(data) {
+    const severityCounts = updateSummaryCards(data);
+    // Update severity chart
+    const lowCombined = severityCounts.lowCombined !== undefined ? severityCounts.lowCombined : (severityCounts.lowWarning + (severityCounts.lowAlert||0));
+    alertSeverityChart.data.datasets[0].data = [
+        severityCounts.highAlert,
+        severityCounts.highWarning,
+        lowCombined
+    ];
+    alertSeverityChart.data.labels = [
+        "High Alert ()",
+        "High Warning ()",
+        "Low Warning ()"
+    ];
+            alertSeverityChart.update();
+
+            // Update equipment chart
+            const equipmentCounts = {};
+            data.forEach(alert => {
+                const key = alert.equipment;
+                equipmentCounts[key] = (equipmentCounts[key] || 0) + 1;
+            });
+
+            const sortedEquipment = Object.entries(equipmentCounts)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 6);
+
+            equipmentChart.data.labels = sortedEquipment.map(([name]) => name);
+            equipmentChart.data.datasets[0].data = sortedEquipment.map(([,count]) => count);
+            equipmentChart.update();
+
+            // Update equipment overview
+            updateEquipmentOverview(data);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const monthFilter = document.getElementById('monthFilter');
+            monthFilter.addEventListener('change', function() {
+                const selectedMonth = this.value;
+                filteredData = filterDataByMonth(selectedMonth);
+                updateCharts(filteredData);
+                updateAlertTable(filteredData);
+                updateFilterStats(selectedMonth, filteredData.length);
+
+                const msg = document.getElementById('noDataMessage');
+                if (msg) {
+                    if (selectedMonth === '2025-10' && filteredData.length === 0) {
+                        msg.style.display = 'block';
+                        msg.textContent = 'No anomaly detected by MMPD for October 2025';
+                    } else if (selectedMonth === '2025-11' && filteredData.length === 0) {
+                        msg.style.display = 'block';
+                        msg.textContent = 'No anomaly detected by MMPD for November 2025';
+                    } else if (selectedMonth === '2025-12' && filteredData.length === 0) {
+                        msg.style.display = 'block';
+                        msg.textContent = 'No anomaly detected by MMPD for December 2025';
+                    } else {
+                        msg.style.display = 'none';
+                    }
+                }
+            });
+
+            // Initialize charts
+            const alertSeverityCtx = document.getElementById('alertSeverityChart').getContext('2d');
+            alertSeverityChart = new Chart(alertSeverityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High Alert (6)', 'High Warning (9)', 'Low Warning (52)'],
+                    datasets: [{
+                        data: [6, 9, 52],
+                        backgroundColor: ['#e74c3c', '#f39c12', '#27ae60'],
+                        borderWidth: 0,
+                        hoverBorderWidth: 2,
+                        hoverBorderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true,
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const equipmentCtx = document.getElementById('equipmentChart').getContext('2d');
+            equipmentChart = new Chart(equipmentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['K-12-01', 'K-19-01', 'K-31-01', 'K-16-01'],
+                    datasets: [{
+                        label: 'Alert Count',
+                        data: [26, 20, 20, 3],
+                        backgroundColor: '#3498db',
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#e8ecf0'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize with selected month
+            const initialMonth = monthFilter.value;
+            filteredData = filterDataByMonth(initialMonth);
+            updateCharts(filteredData);
+            updateAlertTable(filteredData);
+            updateFilterStats(initialMonth, filteredData.length);
+
+            // Show no data message for November if no data
+            const msg = document.getElementById('noDataMessage');
+            if (msg && initialMonth === '2025-11' && filteredData.length === 0) {
+                msg.style.display = 'block';
+                msg.textContent = 'No anomaly detected by MMPD for November 2025';
+            } else if (msg && initialMonth === '2025-12' && filteredData.length === 0) {
+                msg.style.display = 'block';
+                msg.textContent = 'No anomaly detected by MMPD for December 2025';
+            }
+        });
+    const augAlerts = [
+    {plant: "PCFS", equipment: "K-12-01", model: "ST PERFORMANCE", description: "TURB IND STM PR Deviation - Absolute", type: "Low Warning", timestamp: "8/27/2025 6:02:41 PM"},
+    {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "K-12-01 OIL RESERVR LVL Deviation - Absolute", type: "High Alert", timestamp: "8/27/2025 6:02:41 PM"},
+    {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP LP PERFORMANCE", description: "LP CMP THR  BRG T ACT  A Deviation - Absolute", type: "High Warning", timestamp: "8/27/2025 6:02:41 PM"},
+    {plant: "PCFS", equipment: "K-12-01", model: "ST PERFORMANCE", description: "ST INLET PRESS Deviation - Absolute", type: "High Alert", timestamp: "8/27/2025 7:07:41 PM"},
+    {plant: "PCFS", equipment: "K-12-01", model: "ST PERFORMANCE", description: "ST INLET PRESS Deviation - Absolute", type: "High Alert", timestamp: "8/28/2025 7:47:41 AM"}
+];
+
+const sepAlerts = [
+    {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "TURB THR BRG T ACT  A Deviation - Absolute", type: "Low Warning", timestamp: "9/1/2025 2:46:31 PM"},
+    {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "TURB EXT STM PR Deviation - Absolute", type: "Low Warning", timestamp: "9/1/2025 2:46:31 PM"},
+    {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP LP PERFORMANCE", description: "K-19-01 OIL FILTER DP Actual Value", type: "High Warning", timestamp: "9/2/2025 1:51:31 PM"},
+    {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "K-19-01 OIL FILTER DP Actual Value", type: "High Warning", timestamp: "9/2/2025 1:51:31 PM"},
+    {plant: "PCFS", equipment: "K-19-01", model: "NH3 REFIGERATION COMP HP PERFORMANCE", description: "K-19-01 OIL FILTER DP Actual Value", type: "High Warning", timestamp: "9/2/2025 1:51:31 PM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "ST PERFORMANCE", description: "SURFACE CONDENSER LEVEL Deviation - Absolute", type: "High Warning", timestamp: "9/4/2025 4:36:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING STG 1 SUCTION TEMP Deviation - Absolute", type: "Low Warning", timestamp: "9/4/2025 4:36:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING BRG DE TEMP Deviation - Absolute", type: "Low Warning", timestamp: "9/4/2025 4:36:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING NDE SECONDARY SEAL GAS FLOW Deviation - Absolute", type: "High Alert", timestamp: "9/4/2025 4:36:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING DE SECONDARY SEAL GAS FLOW Deviation - Absolute", type: "High Warning", timestamp: "9/4/2025 4:36:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING DE PRIMARY SEAL GAS SUPPLY DP Actual Value", type: "Low Warning", timestamp: "9/4/2025 5:01:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LUBE OIL SUPPLY TEMP Deviation - Absolute", type: "High Alert", timestamp: "9/4/2025 5:01:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LP CASING DE PRIMARY SEAL LEAK OFF FLOW Deviation - Absolute", type: "High Alert", timestamp: "9/4/2025 5:51:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "PRIMARY SEAL GAS FILTER DP Actual Value", type: "High Warning", timestamp: "9/4/2025 6:26:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP LP PERFORMANCE", description: "LUBE OIL FILTER DP Actual Value", type: "High Warning", timestamp: "9/4/2025 9:16:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING DE PRIMARY SEAL LEAK OFF FLOW 2 Actual Value", type: "Low Warning", timestamp: "9/4/2025 11:11:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING BRG DE TEMP Deviation - Absolute", type: "High Warning", timestamp: "9/4/2025 12:26:31 PM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "ST PERFORMANCE", description: "LUBE OIL FILTER DP Actual Value", type: "High Warning", timestamp: "9/5/2025 5:31:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "LUBE OIL FILTER DP Actual Value", type: "High Warning", timestamp: "9/5/2025 5:31:31 AM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING THRUST BRG ACT TEMP Deviation - Absolute", type: "High Warning", timestamp: "9/5/2025 4:21:31 PM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "SYNGAS COMP HP PERFORMANCE", description: "HP CASING NDE PRIMARY SEAL LEAK OFF PRESS Actual Value", type: "Low Warning", timestamp: "9/5/2025 11:26:31 PM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP HP PERFORMANCE", description: "HP CMP JR BRG  T DE A Deviation - Absolute", type: "Low Warning", timestamp: "9/7/2025 3:06:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "GR RAD VB HSS FR End X Deviation - Absolute", type: "High Warning", timestamp: "9/7/2025 3:11:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "GR RAD VB LSS COP End X Deviation - Absolute", type: "High Warning", timestamp: "9/7/2025 3:11:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "GR JR BRG T LSS FR E-A Deviation - Absolute", type: "Low Warning", timestamp: "9/7/2025 3:11:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "GR RAD VB HSS FR End Y Deviation - Absolute", type: "High Warning", timestamp: "9/7/2025 3:11:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "GR RAD VB LSS COP End Y Deviation - Absolute", type: "High Warning", timestamp: "9/7/2025 3:11:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP LP PERFORMANCE", description: "LP CMP RAD VB DE X Deviation - Absolute", type: "High Warning", timestamp: "9/7/2025 4:36:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP HP PERFORMANCE", description: "HP CMP THR BRG T ACT  A Deviation - Absolute", type: "High Alert", timestamp: "9/7/2025 5:16:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP LP PERFORMANCE", description: "V-31-02 LEVEL Deviation - Absolute", type: "High Warning", timestamp: "9/7/2025 12:01:31 PM"},
+    {plant: "PCFS", equipment: "K-12-01", model: "PROCESS AIR COMP HP PERFORMANCE", description: "HP CMP RAD  VB NDE X Deviation - Absolute", type: "High Warning", timestamp: "9/10/2025 10:11:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "ST PERFORMANCE", description: "LO HDR TEMP -ENGNG VE Deviation - Absolute", type: "High Warning", timestamp: "9/11/2025 3:51:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "TURB keyphasor Actual Value", type: "Low Alert", timestamp: "9/11/2025 11:51:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "TURB keyphasor Actual Value", type: "Low Alert", timestamp: "9/11/2025 2:41:31 PM"},
+    {plant: "PCFS", equipment: "K-19-01", model: "ST PERFORMANCE", description: "TURBINE CTRLOIL PRS ALRM Deviation - Absolute", type: "Low Warning", timestamp: "9/11/2025 4:36:31 PM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "GB MECHANICAL", description: "TURB keyphasor Actual Value", type: "Low Alert", timestamp: "9/11/2025 5:01:31 PM"},
+    {plant: "PCFS", equipment: "K-16-01", model: "ST PERFORMANCE", description: "CONTROL OIL PRESS Deviation - Absolute", type: "Low Warning", timestamp: "9/13/2025 12:31:31 AM"},
+    {plant: "PCFS", equipment: "K-31-01", model: "CO2 COMP LP PERFORMANCE", description: "V-31-01 LEVEL Deviation - Absolute", type: "High Warning", timestamp: "9/14/2025 10:31:31 PM"}
+];
+
+if (typeof alertData !== "undefined") { alertData.push(...augAlerts, ...sepAlerts); }
+        
+
+        function updateAlertsByHourChart(data){
+    const ctxEl = document.getElementById('alertsByHourChart');
+    if(!ctxEl) return;
+
+    function deriveSystem(model){
+        if(!model) return 'Other';
+        if(model.includes('PROCESS AIR COMP HP')) return 'HP Compressor';
+        if(model.includes('PROCESS AIR COMP LP')) return 'LP Compressor';
+        if(model.includes('NH3 REFIGERATION COMP HP')) return 'NH3 HP Compressor';
+        if(model.includes('NH3 REFIGERATION COMP LP')) return 'NH3 LP Compressor';
+        if(model.includes('SYNGAS COMP HP')) return 'Syngas HP Compressor';
+        if(model.includes('SYNGAS COMP LP')) return 'Syngas LP Compressor';
+        if(model.includes('CO2 COMP HP')) return 'CO2 HP Compressor';
+        if(model.includes('CO2 COMP LP')) return 'CO2 LP Compressor';
+        if(model.includes('ST PERFORMANCE')) return 'Steam Turbine';
+        if(model.includes('GB MECHANICAL')) return 'Gearbox Mechanical';
+        return 'Other';
+    }
+
+    const info = Array.from({length:24}, () => ({
+        count: 0,
+        sev: { 'High Alert':0, 'High Warning':0, 'Low Warning':0, 'Low Alert':0 },
+        eq: {},
+        sys: {},
+        items: []
+    }));
+
+    data.forEach(a => {
+        const d = new Date(a.timestamp);
+        if (isNaN(d)) return;
+        const h = d.getHours();
+        const bucket = info[h];
+        bucket.count++;
+        if (bucket.sev[a.type] !== undefined) bucket.sev[a.type]++;
+        bucket.eq[a.equipment] = (bucket.eq[a.equipment] || 0) + 1;
+        const sys = deriveSystem(a.model);
+        bucket.sys[sys] = (bucket.sys[sys] || 0) + 1;
+        bucket.items.push(a);
+    });
+
+    const labels = Array.from({length:24}, (_,h)=>String(h).padStart(2,'0')+':00');
+    const counts = info.map(x => x.count);
+
+    const cfg = {
+        type: 'bar',
+        data: { labels, datasets: [{ label: 'Alerts', data: counts, backgroundColor: '#8e44ad', borderRadius: 4, borderSkipped: false }]},
+        options: {
+            responsive:true,
+            maintainAspectRatio:false,
+            plugins:{
+                legend:{ display:false },
+                tooltip:{
+                    callbacks:{
+                        title: (ctx)=> `Hour ${labels[ctx[0].dataIndex]}`,
+                        label: (ctx)=> `Total: ${counts[ctx.dataIndex]}`,
+                        afterLabel: (ctx)=>{
+    const b = info[ctx.dataIndex];
+    const s = b.sev;
+    const lines = [];
+    // Severity breakdown for this hour
+    if (s['High Alert'])   lines.push(`High Alert: ${s['High Alert']}`);
+    if (s['High Warning']) lines.push(`High Warning: ${s['High Warning']}`);
+    if (s['Low Warning'])  lines.push(`Low Warning: ${s['Low Warning']}`);
+    if (s['Low Alert'])    lines.push(`Low Alert: ${s['Low Alert']}`);
+
+    // Units (equipment) breakdown (top 3 for this hour)
+    const topEq = Object.entries(b.eq).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    if (topEq.length){
+        lines.push('');
+        lines.push('Units: ' + topEq.map(([k,v])=>`${k} x ${v}`).join(', '));
+    }
+    // Subsystems breakdown (top 3 for this hour)
+    const topSys = Object.entries(b.sys).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    if (topSys.length){
+        lines.push('Subsystems: ' + topSys.map(([k,v])=>`${k} x ${v}`).join(', '));
+    }
+
+    // Per-date details (top 2 dates within this hour)
+    const dateCounts = {};
+    b.items.forEach(it=>{
+        const d = new Date(it.timestamp);
+        if (isNaN(d)) return;
+        const y = d.getFullYear();
+        const m = String(d.getMonth()+1).padStart(2,'0');
+        const dd = String(d.getDate()).padStart(2,'0');
+        const key = `${y}-${m}-${dd}`;
+        (dateCounts[key] ??= 0);
+        dateCounts[key]++;
+    });
+    const topDates = Object.entries(dateCounts).sort((a,b)=>b[1]-a[1]).slice(0,2);
+    if (topDates.length){
+        lines.push('');
+        topDates.forEach(([dkey,_])=>{
+            const dayItems = b.items.filter(it=>{
+                const d = new Date(it.timestamp);
+                const y = d.getFullYear();
+                const m = String(d.getMonth()+1).padStart(2,'0');
+                const dd = String(d.getDate()).padStart(2,'0');
+                return `${y}-${m}-${dd}` === dkey;
+            });
+            // Aggregate by equipment, subsystem, and description (trigger)
+            const eq = {}, sys = {}, trig = {};
+            dayItems.forEach(it=>{
+                eq[it.equipment] = (eq[it.equipment]||0)+1;
+                const model = it.model||'';
+                let sysName = 'Other';
+                if(model.includes('PROCESS AIR COMP HP')) sysName = 'HP Compressor';
+                else if(model.includes('PROCESS AIR COMP LP')) sysName = 'LP Compressor';
+                else if(model.includes('NH3 REFIGERATION COMP HP')) sysName = 'NH3 HP Compressor';
+                else if(model.includes('NH3 REFIGERATION COMP LP')) sysName = 'NH3 LP Compressor';
+                else if(model.includes('SYNGAS COMP HP')) sysName = 'Syngas HP Compressor';
+                else if(model.includes('SYNGAS COMP LP')) sysName = 'Syngas LP Compressor';
+                else if(model.includes('CO2 COMP HP')) sysName = 'CO2 HP Compressor';
+                else if(model.includes('CO2 COMP LP')) sysName = 'CO2 LP Compressor';
+                else if(model.includes('ST PERFORMANCE')) sysName = 'Steam Turbine';
+                else if(model.includes('GB MECHANICAL')) sysName = 'Gearbox Mechanical';
+                sys[sysName] = (sys[sysName]||0)+1;
+                trig[it.description] = (trig[it.description]||0)+1;
+            });
+            const topEqD = Object.entries(eq).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([k,v])=>`${k} x ${v}`).join(', ');
+            const topSysD = Object.entries(sys).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([k,v])=>`${k} x ${v}`).join(', ');
+            const topTrigD = Object.entries(trig).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([k,v])=>`${k} x ${v}`).join('; ');
+            lines.push(`${dkey}:`);
+            if (topEqD)  lines.push(`  Units: ${topEqD}`);
+            if (topSysD) lines.push(`  Subsystems: ${topSysD}`);
+            if (topTrigD)lines.push(`  Triggers: ${topTrigD}`);
+        });
+    }
+    return lines;
+}
+                    }
+                }
+            },
+            scales:{ y:{ beginAtZero:true, grid:{ color:'#e8ecf0' } }, x:{ grid:{ display:false } } }
+        }
+    };
+    if(window.hourChartInstance){ window.hourChartInstance.data = cfg.data; window.hourChartInstance.options = cfg.options; window.hourChartInstance.update(); }
+    else { window.hourChartInstance = new Chart(ctxEl.getContext('2d'), cfg); }
+    window.hourChartInfo = info;
+}
+        document.addEventListener('DOMContentLoaded', function(){
+            const sel = document.getElementById('monthFilter');
+            const run = () => {
+                const m = sel ? sel.value : 'all';
+                const data = (typeof filterDataByMonth === 'function') ? filterDataByMonth(m) : (window.filteredData || window.alertData || []);
+                updateAlertsByHourChart(data);
+            };
+            if(sel) sel.addEventListener('change', run);
+            run();
+        });</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
